@@ -53,6 +53,7 @@
     }
     _somethingChange = YES;
 }
+
 #pragma mark - GotPDFLinksDelegate
 
 - (void)givePDFLink:(NSString *)link
@@ -109,10 +110,9 @@
     DownloadCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell)
     {
-        cell = (DownloadCell*)[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+        cell = [[DownloadCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
     DataDownload* download = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
-    
     cell.nameLabel.text = download.name;
     
     double percent = (((download.progress*100) < 0)||((download.progress*100) > 100)) ? 0.f: download.progress*100;
