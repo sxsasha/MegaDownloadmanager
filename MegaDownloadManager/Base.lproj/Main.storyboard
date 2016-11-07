@@ -1,26 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="aJJ-6p-R5k">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--PDF files-->
+        <scene sceneID="IJb-VS-mfx">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <tableViewController id="TGV-7B-q4m" customClass="ViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Itq-Ul-qPY">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="pdf" rowHeight="50" id="dB7-ce-1J3" customClass="DownloadCell">
+                                <rect key="frame" x="0.0" y="92" width="320" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dB7-ce-1J3" id="c67-ii-rIe">
+                                    <frame key="frameInset" width="320" height="49"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.59999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="sL9-2b-k4Z"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="progresss" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j1U-2M-wdp">
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bL7-Gr-aWo">
+                                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="j1U-2M-wdp" firstAttribute="centerY" secondItem="c67-ii-rIe" secondAttribute="centerY" id="4f3-MC-m8n"/>
+                                        <constraint firstItem="j1U-2M-wdp" firstAttribute="centerX" secondItem="sL9-2b-k4Z" secondAttribute="centerX" id="5V0-e0-jQc"/>
+                                        <constraint firstItem="sL9-2b-k4Z" firstAttribute="leading" secondItem="c67-ii-rIe" secondAttribute="leading" id="GRs-Pf-oty"/>
+                                        <constraint firstItem="j1U-2M-wdp" firstAttribute="top" secondItem="sL9-2b-k4Z" secondAttribute="top" id="Isa-XT-49c"/>
+                                        <constraint firstItem="bL7-Gr-aWo" firstAttribute="centerX" secondItem="sL9-2b-k4Z" secondAttribute="centerX" id="UuG-fx-iYl"/>
+                                        <constraint firstItem="sL9-2b-k4Z" firstAttribute="centerY" secondItem="c67-ii-rIe" secondAttribute="centerY" id="eoj-fi-nDr"/>
+                                        <constraint firstItem="sL9-2b-k4Z" firstAttribute="width" secondItem="c67-ii-rIe" secondAttribute="width" id="kvm-H4-DGg"/>
+                                        <constraint firstItem="bL7-Gr-aWo" firstAttribute="bottom" secondItem="sL9-2b-k4Z" secondAttribute="top" id="vFy-n1-CxZ"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nameLabel" destination="bL7-Gr-aWo" id="9AX-xj-Rmj"/>
+                                    <outlet property="progressLabel" destination="j1U-2M-wdp" id="qlp-EX-ac4"/>
+                                    <outlet property="progressView" destination="sL9-2b-k4Z" id="MOO-FR-cEK"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="TGV-7B-q4m" id="7Tt-JB-uMW"/>
+                            <outlet property="delegate" destination="TGV-7B-q4m" id="rPY-LW-4C0"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="PDF files" id="uVv-6L-dyp"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="p8g-h3-sfb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-226.40000000000001" y="-107.49625187406298"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4a4-vT-ahK">
+            <objects>
+                <navigationController id="aJJ-6p-R5k" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="NG8-hf-WXz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="TGV-7B-q4m" kind="relationship" relationship="rootViewController" id="Rgh-TO-rGK"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GKs-NC-SmT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1262" y="-107"/>
         </scene>
     </scenes>
 </document>
