@@ -56,11 +56,14 @@
 
 #pragma mark - GotPDFLinksDelegate
 
-- (void)givePDFLink:(NSString *)link
+- (void)givePDFLink:(NSArray <NSString*> *)links
 {
-    DataDownload* download = [[DataDownload alloc]init];
-    download.urlString = link;
-    [self.arrayOfDataDownload addObject:download];
+    for (NSString* urlString in links)
+    {
+        DataDownload* download = [[DataDownload alloc]init];
+        download.urlString = urlString;
+        [self.arrayOfDataDownload addObject:download];
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];

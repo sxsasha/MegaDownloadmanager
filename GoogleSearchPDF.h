@@ -10,7 +10,7 @@
 
 @protocol GotPDFLinksDelegate <NSObject>
 
-- (void) givePDFLink: (NSString*) link;
+- (void) givePDFLink: (NSArray <NSString*> *) link;
 
 @end
 
