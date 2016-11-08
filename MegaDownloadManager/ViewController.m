@@ -80,6 +80,7 @@
             download.isComplate = YES;
             self.somethingChange = YES;
             [[NSFileManager defaultManager] moveItemAtURL:url toURL:download.localURL error:nil];
+            break;
         }
     }
 }
@@ -92,6 +93,7 @@
         {
             download.progress = progress;
             self.somethingChange = YES;
+            break;
         }
     }
 }
