@@ -15,6 +15,7 @@
 
 @property (nonatomic,strong) dispatch_queue_t queue;
 @property (nonatomic,assign) NSInteger startIndex;
+@property (nonatomic,strong) NSURLSessionDataTask* dataTask;
 @end
 
 @implementation GoogleSearchPDF
@@ -35,35 +36,41 @@
 
 - (void) getTenPDFLinks
 {
-    dispatch_async(self.queue, ^{
+    //dispatch_async(self.queue, ^{
         [self createRequest];
-    });
+   // });
 }
 
 - (void) createRequest
 {
     NSString* urlString = [NSString stringWithFormat:@"https://www.googleapis.com/customsearch/v1?q=ios&fileType=pdf&filter=1&cx=%@&key=%@&start=%ld",GoogleSearchID,GoogleAPI,self.startIndex];
+    
     NSURL* url = [NSURL URLWithString:urlString];
     
-    NSData* JSONdata = [NSData dataWithContentsOfURL:url];
-    
-    NSError* error;
-    NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:JSONdata options:NSJSONReadingAllowFragments error:&error];
-    
-    if ((!error)&&(dictionary))
+    NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.f];
+
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
     {
-        [self parseDict:dictionary];
-    }
+        NSError* errorWithDeSerialization;
+        NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorWithDeSerialization];
+        
+        if ((!errorWithDeSerialization)&&(dictionary))
+        {
+            [self parseDict:dictionary];
+        }
+    }] resume];
 }
 
 -(void) parseDict: (NSDictionary*) dict
 {
     NSArray* arrayOfSearchResult = dict[@"items"];
     
+    NSMutableArray* array = [NSMutableArray array];
     for (NSDictionary* dictionary in arrayOfSearchResult)
     {
-        [self.delegate givePDFLink:dictionary[@"link"]];
+        [array addObject:dictionary[@"link"]];
     }
+    [self.delegate givePDFLink:array];
 }
 
 @end
