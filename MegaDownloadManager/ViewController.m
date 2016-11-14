@@ -39,7 +39,8 @@
     
     for (DataDownload* dataDownload in dataDownloadsFromDatabase)
     {
-        dataDownload.urlString = dataDownload.urlString;
+        NSString* string = dataDownload.urlString;
+        [dataDownload UrlStrings111:string];
         NSString* name = dataDownload.name;
         int16_t identifier = dataDownload.identifier;
         NSString* urlString = dataDownload.urlString;

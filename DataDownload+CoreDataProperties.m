@@ -21,18 +21,6 @@
 @dynamic progress;
 @dynamic isComplate;
 
-- (void) setUrlString:(NSString *)urlString
-{
-    self.name = [[urlString lastPathComponent] stringByRemovingPercentEncoding];
-    
-    
-    NSURL* documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                                  inDomains:NSUserDomainMask] lastObject];
-    self.localURL = [documentsURL URLByAppendingPathComponent:self.name].absoluteString;
-    
-    [self willChangeValueForKey:@"urlString"];
-    [self setPrimitiveValue:urlString forKey:@"urlString"];
-    [self didChangeValueForKey:@"urlString"];
-}
+
 
 @end

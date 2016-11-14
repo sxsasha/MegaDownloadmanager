@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DataDownload : NSManagedObject
 
+- (void) UrlStrings111:(NSString *)url;
+
 @end
 
 NS_ASSUME_NONNULL_END
