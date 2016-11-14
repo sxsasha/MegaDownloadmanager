@@ -11,6 +11,7 @@
 #import "DownloadManager.h"
 #import "DownloadCell.h"
 #import "GoogleSearchPDF.h"
+#import "CoreDataManager.h"
 
 #define timeToUpdate 0.04  //25 framerate
 
@@ -22,6 +23,7 @@
 @property (nonatomic,strong) GoogleSearchPDF* searchPDFmanager;
 @property (nonatomic,assign) BOOL somethingChange;
 @property (nonatomic,strong) UIWebView* webView;
+@property (nonatomic,strong) CoreDataManager* coreDataManager;
 @end
 
 @implementation ViewController
@@ -29,12 +31,29 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.coreDataManager = [CoreDataManager sharedManager];
     self.arrayOfDataDownload = [NSMutableArray array];
+    
+    NSArray* dataDownloadsFromDatabase = [self.coreDataManager getAllDataDownloads];
+    [self.arrayOfDataDownload addObjectsFromArray:dataDownloadsFromDatabase];
+    
+    for (DataDownload* dataDownload in dataDownloadsFromDatabase)
+    {
+        dataDownload.urlString = dataDownload.urlString;
+        NSString* name = dataDownload.name;
+        int16_t identifier = dataDownload.identifier;
+        NSString* urlString = dataDownload.urlString;
+        NSString* localURL = dataDownload.localURL;
+        double progress = dataDownload.progress;
+        BOOL isComplate = dataDownload.isComplate;
+        
+    }
+    
     self.downloadManager = [DownloadManager sharedManagerWithDelegate:self];
     self.somethingChange = NO;
     
     self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
-    [self.searchPDFmanager getTenPDFLinks];    
+    [self.searchPDFmanager getTenPDFLinks];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,11 +79,12 @@
 {
     for (NSString* urlString in links)
     {
-        DataDownload* download = [[DataDownload alloc]init];
+        DataDownload* download = [self.coreDataManager addDataDownload];
         download.urlString = urlString;
         [self.arrayOfDataDownload addObject:download];
     }
     
+    [self.coreDataManager  save:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
@@ -82,9 +102,12 @@
             download.progress = 1.0f;
             download.isComplate = YES;
             self.somethingChange = YES;
-            [[NSFileManager defaultManager] moveItemAtURL:url toURL:download.localURL error:nil];
+            NSURL* localURL = [NSURL URLWithString:download.localURL];
+            [[NSFileManager defaultManager] moveItemAtURL:url toURL:localURL error:nil];
+            break;
         }
     }
+    [self.coreDataManager save:nil];
 }
 
 -(void) progressDownload:(double)progress taskIdentifier:(NSUInteger)identifier
@@ -135,8 +158,9 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     DataDownload* download = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+    NSURL* localURL = [NSURL URLWithString:download.localURL];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:download.localURL.resourceSpecifier])
+    if ([[NSFileManager defaultManager] fileExistsAtPath:localURL.resourceSpecifier])
     {
         download.isComplate = YES;
         download.progress = 1.f;
@@ -147,7 +171,8 @@
         self.webView = nil;
         viewController.view = self.webView = [[UIWebView alloc]init];
         
-        NSURLRequest* requests = [NSURLRequest requestWithURL:download.localURL];
+        NSURL* localURL = [NSURL URLWithString:download.localURL];
+        NSURLRequest* requests = [NSURLRequest requestWithURL:localURL];
         [self.webView loadRequest:requests];
         
         [self.navigationController pushViewController:viewController animated:YES];
@@ -157,6 +182,8 @@
     {
         download.identifier = [self.downloadManager downloadFromURL:download.urlString];
     }
+    
+    [self.coreDataManager save:nil];
 }
 
 @end

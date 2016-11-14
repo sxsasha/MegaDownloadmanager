@@ -1,20 +1,20 @@
 //
-//  DataDownload.h
+//  DataDownload+CoreDataClass.h
 //  MegaDownloadManager
 //
-//  Created by admin on 04.11.16.
+//  Created by admin on 14.11.16.
 //  Copyright © 2016 admin. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface DataDownload : NSObject
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic,strong) NSString* name;
-@property (nonatomic,assign) NSUInteger identifier;
-@property (nonatomic,strong) NSString* urlString;
-@property (nonatomic,strong) NSURL* localURL;
-@property (nonatomic,assign) double progress;
-@property (nonatomic,assign) BOOL isComplate;
+@interface DataDownload : NSManagedObject
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "DataDownload+CoreDataProperties.h"

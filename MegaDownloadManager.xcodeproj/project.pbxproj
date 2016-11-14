@@ -14,8 +14,11 @@
 		84721E1D1DCC6F2E00014F87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84721E1C1DCC6F2E00014F87 /* Assets.xcassets */; };
 		84721E201DCC6F2E00014F87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84721E1E1DCC6F2E00014F87 /* LaunchScreen.storyboard */; };
 		84721E291DCC70FD00014F87 /* DownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84721E281DCC70FD00014F87 /* DownloadManager.m */; };
-		84721E2F1DCC91B300014F87 /* DataDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 84721E2E1DCC91B300014F87 /* DataDownload.m */; };
 		84721E341DCCB6DB00014F87 /* DownloadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84721E331DCCB6DB00014F87 /* DownloadCell.m */; };
+		84AD607F1DD9D68A00D8C912 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84AD607D1DD9D68A00D8C912 /* Model.xcdatamodeld */; };
+		84AD60921DD9D8E900D8C912 /* DataDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD608F1DD9D8E900D8C912 /* DataDownload.m */; };
+		84AD60931DD9D8E900D8C912 /* DataDownload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD60911DD9D8E900D8C912 /* DataDownload+CoreDataProperties.m */; };
+		84AD60961DD9DFA500D8C912 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD60951DD9DFA500D8C912 /* CoreDataManager.m */; };
 		84B855621DD06B0B00F2E5D3 /* GoogleSearchPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B855611DD06B0B00F2E5D3 /* GoogleSearchPDF.m */; };
 /* End PBXBuildFile section */
 
@@ -32,10 +35,16 @@
 		84721E211DCC6F2E00014F87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84721E271DCC70FD00014F87 /* DownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DownloadManager.h; path = ../DownloadManager.h; sourceTree = "<group>"; };
 		84721E281DCC70FD00014F87 /* DownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DownloadManager.m; path = ../DownloadManager.m; sourceTree = "<group>"; };
-		84721E2D1DCC91B300014F87 /* DataDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataDownload.h; path = ../DataDownload.h; sourceTree = "<group>"; };
-		84721E2E1DCC91B300014F87 /* DataDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataDownload.m; path = ../DataDownload.m; sourceTree = "<group>"; };
 		84721E321DCCB6DB00014F87 /* DownloadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DownloadCell.h; path = ../DownloadCell.h; sourceTree = "<group>"; };
 		84721E331DCCB6DB00014F87 /* DownloadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DownloadCell.m; path = ../DownloadCell.m; sourceTree = "<group>"; };
+		84AD607E1DD9D68A00D8C912 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		84AD60851DD9D87900D8C912 /* MegaDownloadManager-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MegaDownloadManager-Bridging-Header.h"; sourceTree = "<group>"; };
+		84AD608E1DD9D8E900D8C912 /* DataDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataDownload.h; sourceTree = "<group>"; };
+		84AD608F1DD9D8E900D8C912 /* DataDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataDownload.m; sourceTree = "<group>"; };
+		84AD60901DD9D8E900D8C912 /* DataDownload+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DataDownload+CoreDataProperties.h"; sourceTree = "<group>"; };
+		84AD60911DD9D8E900D8C912 /* DataDownload+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DataDownload+CoreDataProperties.m"; sourceTree = "<group>"; };
+		84AD60941DD9DFA500D8C912 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
+		84AD60951DD9DFA500D8C912 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		84B855601DD06B0B00F2E5D3 /* GoogleSearchPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GoogleSearchPDF.h; path = ../GoogleSearchPDF.h; sourceTree = "<group>"; };
 		84B855611DD06B0B00F2E5D3 /* GoogleSearchPDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GoogleSearchPDF.m; path = ../GoogleSearchPDF.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,6 +65,7 @@
 			children = (
 				84721E0F1DCC6F2E00014F87 /* MegaDownloadManager */,
 				84721E0E1DCC6F2E00014F87 /* Products */,
+				84AD60851DD9D87900D8C912 /* MegaDownloadManager-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,8 +80,8 @@
 		84721E0F1DCC6F2E00014F87 /* MegaDownloadManager */ = {
 			isa = PBXGroup;
 			children = (
+				84AD60801DD9D69200D8C912 /* CoreData */,
 				84B855631DD0818600F2E5D3 /* Managers */,
-				84721E381DCCBB9D00014F87 /* Model */,
 				84721E391DCCBBAC00014F87 /* Controller */,
 				84721E321DCCB6DB00014F87 /* DownloadCell.h */,
 				84721E331DCCB6DB00014F87 /* DownloadCell.m */,
@@ -94,15 +104,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		84721E381DCCBB9D00014F87 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				84721E2D1DCC91B300014F87 /* DataDownload.h */,
-				84721E2E1DCC91B300014F87 /* DataDownload.m */,
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
 		84721E391DCCBBAC00014F87 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +111,21 @@
 				84721E171DCC6F2E00014F87 /* ViewController.m */,
 			);
 			name = Controller;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		84AD60801DD9D69200D8C912 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				84AD607D1DD9D68A00D8C912 /* Model.xcdatamodeld */,
+				84AD608E1DD9D8E900D8C912 /* DataDownload.h */,
+				84AD608F1DD9D8E900D8C912 /* DataDownload.m */,
+				84AD60901DD9D8E900D8C912 /* DataDownload+CoreDataProperties.h */,
+				84AD60911DD9D8E900D8C912 /* DataDownload+CoreDataProperties.m */,
+				84AD60941DD9DFA500D8C912 /* CoreDataManager.h */,
+				84AD60951DD9DFA500D8C912 /* CoreDataManager.m */,
+			);
+			name = CoreData;
 			path = ..;
 			sourceTree = "<group>";
 		};
@@ -155,6 +171,7 @@
 				TargetAttributes = {
 					84721E0C1DCC6F2E00014F87 = {
 						CreatedOnToolsVersion = 8.0;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -196,11 +213,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				84721E181DCC6F2E00014F87 /* ViewController.m in Sources */,
+				84AD60931DD9D8E900D8C912 /* DataDownload+CoreDataProperties.m in Sources */,
+				84AD60961DD9DFA500D8C912 /* CoreDataManager.m in Sources */,
 				84721E151DCC6F2E00014F87 /* AppDelegate.m in Sources */,
 				84721E121DCC6F2E00014F87 /* main.m in Sources */,
-				84721E2F1DCC91B300014F87 /* DataDownload.m in Sources */,
+				84AD607F1DD9D68A00D8C912 /* Model.xcdatamodeld in Sources */,
 				84B855621DD06B0B00F2E5D3 /* GoogleSearchPDF.m in Sources */,
 				84721E291DCC70FD00014F87 /* DownloadManager.m in Sources */,
+				84AD60921DD9D8E900D8C912 /* DataDownload.m in Sources */,
 				84721E341DCCB6DB00014F87 /* DownloadCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -321,10 +341,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = MegaDownloadManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = softgroup.MegaDownloadManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MegaDownloadManager-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -332,10 +356,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = MegaDownloadManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = softgroup.MegaDownloadManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MegaDownloadManager-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -361,6 +388,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		84AD607D1DD9D68A00D8C912 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				84AD607E1DD9D68A00D8C912 /* Model.xcdatamodel */,
+			);
+			currentVersion = 84AD607E1DD9D68A00D8C912 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 84721E051DCC6F2E00014F87 /* Project object */;
 }
