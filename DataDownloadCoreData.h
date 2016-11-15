@@ -11,13 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class DownloadCell;
 
-@interface DataDownload : NSManagedObject
-
-@property (strong ,nonatomic) DownloadCell* cell;
-@property (assign ,nonatomic) int16_t identifier;
-@property (assign, nonatomic) double progress;
+@interface DataDownloadCoreData : NSManagedObject
 
 @end
 
