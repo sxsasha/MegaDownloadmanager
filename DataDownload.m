@@ -23,6 +23,17 @@
     return self;
 }
 
+- (instancetype)initWithDataDownload: (DataDownloadCoreData*) dataDownload
+{
+    self = [super init];
+    if (self)
+    {
+        self.coreDataManager = [CoreDataManager sharedManager];
+        self.dataDownloadCoreData = dataDownload;
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     [self.coreDataManager deleteDataDownload:self.dataDownloadCoreData];
@@ -50,9 +61,8 @@
 - (void) setIsComplate:(BOOL)isComplate
 {
     _isComplate = isComplate;
-    BOOL is = isComplate;
     
-    self.dataDownloadCoreData.isComplate = isComplate;
+    self.dataDownloadCoreData.isComplate = @(_isComplate);
     if (isComplate)
     {
         [self.coreDataManager save:nil];
@@ -80,8 +90,10 @@
     NSMutableArray* array = [NSMutableArray array];
     for (DataDownloadCoreData* obj in dataDownloadsFromDatabase)
     {
-        DataDownload* dataDownload = [[DataDownload alloc] init];
+        DataDownload* dataDownload = [[DataDownload alloc] initWithDataDownload:obj];
         dataDownload.urlString = obj.urlString;
+        dataDownload.isComplate = obj.isComplate;
+
         [array addObject:dataDownload];
     }
     return array;

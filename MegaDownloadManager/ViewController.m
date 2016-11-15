@@ -23,6 +23,8 @@
 @property (nonatomic,strong) GoogleSearchPDF* searchPDFmanager;
 
 @property (nonatomic,strong) UIWebView* webView;
+
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @end
 
 @implementation ViewController
@@ -40,6 +42,14 @@
 
 - (void) initALL
 {
+    
+//    NSURL* documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+//                                                                  inDomains:NSUserDomainMask] lastObject];
+//    NSLog(@"documentsURL: %@", documentsURL);
+//    [[CoreDataManager sharedManager] deleteAll];
+//    [[CoreDataManager sharedManager] save:nil];
+    
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.downloadManager = [DownloadManager sharedManagerWithDelegate:self];
     self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
     
@@ -49,7 +59,14 @@
     NSArray* dataDownloadsFromDatabase = [DataDownload getAllDataDownloadFromaDatabase];
     [self.arrayOfDataDownload addObjectsFromArray:dataDownloadsFromDatabase];
     
-    [self.searchPDFmanager getTenPDFLinks];
+    //[self.searchPDFmanager getTenPDFLinksWithSearchString:@"Test"];
+}
+
+#pragma mark - Actions
+
+- (IBAction)addMorePDFLinks:(UIBarButtonItem *)sender
+{
+    [self.searchPDFmanager getTenPDFLinksWithSearchString:self.searchBar.text];
 }
 
 #pragma mark - Help Methods
@@ -68,9 +85,15 @@
         else
         {
             dataDownload.cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",100.0];
-            [dataDownload.cell.progressView setProgress:dataDownload.progress animated:YES];
+            [dataDownload.cell.progressView setProgress:1.f animated:YES];
         }
     });
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self.searchBar resignFirstResponder];
 }
 
 #pragma mark - GotPDFLinksDelegate

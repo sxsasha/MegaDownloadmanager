@@ -19,5 +19,5 @@
 @property (nonatomic,weak) id <GotPDFLinksDelegate> delegate;
 +(GoogleSearchPDF*) sharedManagerWithDelegate: (id <GotPDFLinksDelegate>) delegate;
 
-- (void) getTenPDFLinks;
+- (void) getTenPDFLinksWithSearchString: (NSString*) searchString;
 @end

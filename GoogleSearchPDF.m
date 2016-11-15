@@ -28,22 +28,22 @@
         manager = [[GoogleSearchPDF alloc]init];
         manager.delegate = delegate;
         manager.queue = dispatch_queue_create("GoogleSearchPDF", DISPATCH_QUEUE_SERIAL);
-        manager.startIndex = 1 + (arc4random() % 90);
+        manager.startIndex = 1;// + (arc4random() % 90);
     });
     
     return manager;
 }
 
-- (void) getTenPDFLinks
+- (void) getTenPDFLinksWithSearchString: (NSString*) searchString
 {
-    //dispatch_async(self.queue, ^{
-        [self createRequest];
-   // });
+    dispatch_async(self.queue, ^{
+        [self createRequest:searchString];
+    });
 }
 
-- (void) createRequest
+- (void) createRequest: (NSString*) searchString
 {
-    NSString* urlString = [NSString stringWithFormat:@"https://www.googleapis.com/customsearch/v1?q=ios&fileType=pdf&filter=1&cx=%@&key=%@&start=%ld",GoogleSearchID,GoogleAPI,self.startIndex];
+    NSString* urlString = [NSString stringWithFormat:@"https://www.googleapis.com/customsearch/v1?q=%@&fileType=pdf&filter=1&cx=%@&key=%@&start=%ld", searchString,GoogleSearchID,GoogleAPI,self.startIndex];
     
     NSURL* url = [NSURL URLWithString:urlString];
     

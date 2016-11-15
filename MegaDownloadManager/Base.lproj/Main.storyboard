@@ -14,12 +14,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="KXF-uF-eS6">
+                            <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="pdf" rowHeight="50" id="dB7-ce-1J3" customClass="DownloadCell">
-                                <rect key="frame" x="0.0" y="92" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="136" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dB7-ce-1J3" id="c67-ii-rIe">
-                                    <frame key="frameInset" width="375" height="50"/>
+                                    <frame key="frameInset" width="375" height="49"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sL9-2b-k4Z"/>
@@ -57,9 +62,27 @@
                             <outlet property="delegate" destination="TGV-7B-q4m" id="rPY-LW-4C0"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="PDF files" id="uVv-6L-dyp"/>
+                    <navigationItem key="navigationItem" title="PDF files" id="uVv-6L-dyp">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="xXy-su-X6N">
+                            <connections>
+                                <action selector="addMorePDFLinks:" destination="TGV-7B-q4m" id="OQJ-8g-Pq7"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="KXF-uF-eS6" id="2S3-Uf-0je"/>
+                        <outlet property="searchDisplayController" destination="aVM-X1-sg8" id="dZG-9s-1FV"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p8g-h3-sfb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="aVM-X1-sg8">
+                    <connections>
+                        <outlet property="delegate" destination="TGV-7B-q4m" id="rsi-br-Z0e"/>
+                        <outlet property="searchContentsController" destination="TGV-7B-q4m" id="GKM-aM-fpw"/>
+                        <outlet property="searchResultsDataSource" destination="TGV-7B-q4m" id="Z4a-9w-WGy"/>
+                        <outlet property="searchResultsDelegate" destination="TGV-7B-q4m" id="3Fc-Dp-NPE"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="-226.40000000000001" y="-107.49625187406298"/>
         </scene>
