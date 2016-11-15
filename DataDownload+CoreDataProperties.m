@@ -8,18 +8,16 @@
 
 #import "DataDownload+CoreDataProperties.h"
 
-@implementation DataDownload (CoreDataProperties)
+@implementation DataDownloadCoreData (CoreDataProperties)
 
-+ (NSFetchRequest<DataDownload *> *)fetchRequest {
++ (NSFetchRequest<DataDownloadCoreData *> *)fetchRequest {
 	return [[NSFetchRequest alloc] initWithEntityName:@"DataDownload"];
 }
 
 @dynamic name;
-@dynamic identifier;
-@dynamic urlString;
 @dynamic localURL;
-@dynamic progress;
 @dynamic isComplate;
+@dynamic urlString;
 
 
 

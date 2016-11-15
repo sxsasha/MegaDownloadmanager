@@ -8,6 +8,7 @@
 
 #import "DownloadManager.h"
 
+
 #define maxConcurentDownload 15
 
 @implementation DownloadManager
@@ -20,6 +21,8 @@
         manager = [[DownloadManager alloc]init];
         NSOperationQueue* ourQueue = [[NSOperationQueue alloc]init];
         ourQueue.maxConcurrentOperationCount = maxConcurentDownload;
+        ourQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+        
         NSURLSessionConfiguration* sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
         manager.defaultSession = [NSURLSession sessionWithConfiguration:sessionConfig
                                                                delegate:manager
@@ -31,7 +34,7 @@
     return manager;
 }
 
--(NSUInteger) downloadFromURL:(NSString*) urlString
+-(int16_t) downloadWithURL: (NSString*) urlString
 {
     NSURL* url = [NSURL URLWithString:urlString];
     if (url)
@@ -40,7 +43,7 @@
         sessionTask.taskDescription = urlString;
         [self.arrayOfDataTask addObject:sessionTask];
         [sessionTask resume];
-        return sessionTask.taskIdentifier;
+        return (int16_t)sessionTask.taskIdentifier;
     }
     return 0;
 }
@@ -53,15 +56,16 @@
  totalBytesWritten:(int64_t)totalBytesWritten
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    [self.delegate progressDownload:((double)totalBytesWritten / (double)totalBytesExpectedToWrite) taskIdentifier:
-     downloadTask.taskIdentifier];
+    [self.delegate progressDownload:((double)totalBytesWritten / (double)totalBytesExpectedToWrite)
+                         identifier:(int16_t)downloadTask.taskIdentifier];
 }
 
 - (void)URLSession:(NSURLSession *)session
       downloadTask:(NSURLSessionDownloadTask *)downloadTask
 didFinishDownloadingToURL:(NSURL *)location
 {
-    [self.delegate complateDownloadInURL:location taskIdentifier:downloadTask.taskIdentifier];
+    [self.delegate complateDownloadInURL:location
+                              identifier:(int16_t)downloadTask.taskIdentifier];
 }
 
 @end

@@ -6,20 +6,17 @@
 //  Copyright © 2016 admin. All rights reserved.
 //
 
-#import "DataDownload.h"
-
+#import "DataDownloadCoreData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DataDownload (CoreDataProperties)
+@interface DataDownloadCoreData (CoreDataProperties)
 
-+ (NSFetchRequest<DataDownload *> *)fetchRequest;
++ (NSFetchRequest<DataDownloadCoreData *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSString *name;
-@property (nonatomic) int16_t identifier; // NSUInteger
 @property (nullable, nonatomic, copy) NSString *urlString;
-@property (nullable, nonatomic, copy) NSString *localURL; //NSURL
-@property (nonatomic) double progress;
+@property (nullable, nonatomic, copy) NSString *localURL;
 @property (nonatomic) BOOL isComplate;
 
 @end

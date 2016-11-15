@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "DataDownload.h"
+#import "DataDownloadCoreData.h"
 
 @interface CoreDataManager : NSObject
 
@@ -17,9 +17,9 @@
 @property (strong, nonatomic) NSPersistentStoreCoordinator* persistentStoreCoordinator;
 
 +(CoreDataManager*) sharedManager;
--(DataDownload*) addDataDownload;
+-(DataDownloadCoreData*) addDataDownload;
 -(void) deleteAll;
--(void) deleteDataDownload: (DataDownload*) dataDownload;
+-(void) deleteDataDownload: (DataDownloadCoreData*) dataDownload;
 -(NSArray*) getAllDataDownloads;
 -(BOOL) save: (NSError**) errorWithSave;
 

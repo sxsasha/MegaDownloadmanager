@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DataDownload.h"
 
 @protocol DownloadTasksDelegate <NSObject>
 
--(void) progressDownload: (double) progress taskIdentifier: (NSUInteger) identifier;
--(void) complateDownloadInURL:(NSURL*) url taskIdentifier: (NSUInteger) identifier;
+-(void) progressDownload: (double) progress identifier: (int16_t) identifier;
+-(void) complateDownloadInURL:(NSURL*) url identifier: (int16_t) identifier;
 
 @end
 
@@ -24,6 +25,6 @@
 @property (nonatomic,weak) id <DownloadTasksDelegate> delegate;
 
 +(DownloadManager*) sharedManagerWithDelegate: (id <DownloadTasksDelegate>) delegate;
--(NSUInteger) downloadFromURL:(NSString*) urlString;
+-(int16_t) downloadWithURL: (NSString*) urlString;
 
 @end

@@ -87,9 +87,9 @@
 
 #pragma mark - Work with Core Data Entity
 
--(DataDownload*) addDataDownload
+-(DataDownloadCoreData*) addDataDownload
 {
-    DataDownload *newDownload = [NSEntityDescription insertNewObjectForEntityForName:@"DataDownload" inManagedObjectContext:self.managedObjectContext];
+    DataDownloadCoreData *newDownload = [NSEntityDescription insertNewObjectForEntityForName:@"DataDownload" inManagedObjectContext:self.managedObjectContext];
     
     return newDownload;
 }
@@ -125,7 +125,7 @@
     return allDataDownloads;
 }
 
--(void) deleteDataDownload: (DataDownload*) dataDownload
+-(void) deleteDataDownload: (DataDownloadCoreData*) dataDownload
 {
     [self.managedObjectContext deleteObject:dataDownload];
 }

@@ -11,19 +11,18 @@
 #import "DownloadManager.h"
 #import "DownloadCell.h"
 #import "GoogleSearchPDF.h"
-#import "CoreDataManager.h"
 
 #define timeToUpdate 0.04  //25 framerate
 
 @interface ViewController () <DownloadTasksDelegate, UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate>
 
 @property (nonatomic,strong) NSMutableArray* arrayOfDataDownload;
-@property (nonatomic,strong) NSTimer* timer;
+@property (nonatomic,strong) NSMutableDictionary* dictionaryOfCurrentDownload;
+
 @property (nonatomic,strong) DownloadManager* downloadManager;
 @property (nonatomic,strong) GoogleSearchPDF* searchPDFmanager;
-@property (nonatomic,assign) BOOL somethingChange;
+
 @property (nonatomic,strong) UIWebView* webView;
-@property (nonatomic,strong) CoreDataManager* coreDataManager;
 @end
 
 @implementation ViewController
@@ -31,30 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.coreDataManager = [CoreDataManager sharedManager];
-    self.arrayOfDataDownload = [NSMutableArray array];
-    
-    NSArray* dataDownloadsFromDatabase = [self.coreDataManager getAllDataDownloads];
-    [self.arrayOfDataDownload addObjectsFromArray:dataDownloadsFromDatabase];
-    
-    for (DataDownload* dataDownload in dataDownloadsFromDatabase)
-    {
-        NSString* string = dataDownload.urlString;
-        [dataDownload UrlStrings111:string];
-        NSString* name = dataDownload.name;
-        int16_t identifier = dataDownload.identifier;
-        NSString* urlString = dataDownload.urlString;
-        NSString* localURL = dataDownload.localURL;
-        double progress = dataDownload.progress;
-        BOOL isComplate = dataDownload.isComplate;
-        
-    }
-    
-    self.downloadManager = [DownloadManager sharedManagerWithDelegate:self];
-    self.somethingChange = NO;
-    
-    self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
-    [self.searchPDFmanager getTenPDFLinks];
+    [self initALL];
 }
 
 - (void)didReceiveMemoryWarning
@@ -62,16 +38,39 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void) setSomethingChange:(BOOL)somethingChange
+- (void) initALL
 {
-    if (_somethingChange == NO)
-    {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeToUpdate * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            _somethingChange = NO;
-        });
-    }
-    _somethingChange = YES;
+    self.downloadManager = [DownloadManager sharedManagerWithDelegate:self];
+    self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
+    
+    self.arrayOfDataDownload = [NSMutableArray array];
+    self.dictionaryOfCurrentDownload = [NSMutableDictionary dictionary];
+    
+    NSArray* dataDownloadsFromDatabase = [DataDownload getAllDataDownloadFromaDatabase];
+    [self.arrayOfDataDownload addObjectsFromArray:dataDownloadsFromDatabase];
+    
+    [self.searchPDFmanager getTenPDFLinks];
+}
+
+#pragma mark - Help Methods
+
+- (void) updateDownloadCell: (DataDownload*) dataDownload
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!dataDownload.isComplate)
+        {
+            double percent = (((dataDownload.progress*100) < 0)||((dataDownload.progress*100) > 100)) ?
+            0.f: dataDownload.progress*100;
+            dataDownload.cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
+            [dataDownload.cell.progressView setProgress:dataDownload.progress animated:YES];
+            return;
+        }
+        else
+        {
+            dataDownload.cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",100.0];
+            [dataDownload.cell.progressView setProgress:dataDownload.progress animated:YES];
+        }
+    });
 }
 
 #pragma mark - GotPDFLinksDelegate
@@ -80,47 +79,36 @@
 {
     for (NSString* urlString in links)
     {
-        DataDownload* download = [self.coreDataManager addDataDownload];
+        DataDownload* download = [[DataDownload alloc] init];
         download.urlString = urlString;
+        
         [self.arrayOfDataDownload addObject:download];
     }
     
-    [self.coreDataManager  save:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
 }
 
-
 #pragma mark - DownloadTasksDelegate
 
--(void) complateDownloadInURL:(NSURL *)url taskIdentifier:(NSUInteger)identifier
+-(void) complateDownloadInURL:(NSURL *)url identifier:(int16_t)identifier
 {
-    for(DataDownload* download in self.arrayOfDataDownload)
-    {
-        if (download.identifier == identifier)
-        {
-            download.progress = 1.0f;
-            download.isComplate = YES;
-            self.somethingChange = YES;
-            NSURL* localURL = [NSURL URLWithString:download.localURL];
-            [[NSFileManager defaultManager] moveItemAtURL:url toURL:localURL error:nil];
-            break;
-        }
-    }
-    [self.coreDataManager save:nil];
+    DataDownload* dataDownload = [self.dictionaryOfCurrentDownload objectForKey:@(identifier)];
+    dataDownload.progress = 1.0f;
+    dataDownload.isComplate = YES;
+    NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
+    [[NSFileManager defaultManager] moveItemAtURL:url toURL:localURL error:nil];
+    
+    [self updateDownloadCell:dataDownload];
 }
 
--(void) progressDownload:(double)progress taskIdentifier:(NSUInteger)identifier
+-(void) progressDownload:(double)progress identifier:(int16_t)identifier
 {
-    for(DataDownload* download in self.arrayOfDataDownload)
-    {
-        if (download.identifier == identifier)
-        {
-            download.progress = progress;
-            self.somethingChange = YES;
-        }
-    }
+    DataDownload* dataDownload = [self.dictionaryOfCurrentDownload objectForKey:@(identifier)];
+    dataDownload.progress = progress;
+    
+    [self updateDownloadCell:dataDownload];
 }
 
 #pragma mark - UITableViewDataSource
@@ -139,12 +127,10 @@
     {
         cell = [[DownloadCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
-    DataDownload* download = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
-    cell.nameLabel.text = download.name;
     
-    double percent = (((download.progress*100) < 0)||((download.progress*100) > 100)) ? 0.f: download.progress*100;
-    cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
-    [cell.progressView setProgress:download.progress animated:YES];
+    DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+    dataDownload.cell = cell;
+    cell.nameLabel.text = dataDownload.name;
     
     return cell;
 }
@@ -158,33 +144,30 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    DataDownload* download = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
-    NSURL* localURL = [NSURL URLWithString:download.localURL];
+    DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+    NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:localURL.resourceSpecifier])
     {
-        download.isComplate = YES;
-        download.progress = 1.f;
-        
         UIViewController* viewController = [[UIViewController alloc]init];
         
         [self.webView loadHTMLString: @"" baseURL: nil];
         self.webView = nil;
         viewController.view = self.webView = [[UIWebView alloc]init];
         
-        NSURL* localURL = [NSURL URLWithString:download.localURL];
+        NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
         NSURLRequest* requests = [NSURLRequest requestWithURL:localURL];
         [self.webView loadRequest:requests];
         
         [self.navigationController pushViewController:viewController animated:YES];
-        self.somethingChange = YES;
+        dataDownload.isComplate = YES;
+        [self updateDownloadCell:dataDownload];
     }
-    else if (download.progress == 0.f)
+    else if (dataDownload.progress == 0.f)
     {
-        download.identifier = [self.downloadManager downloadFromURL:download.urlString];
+        dataDownload.identifier = [self.downloadManager downloadWithURL:dataDownload.urlString];
+        [self.dictionaryOfCurrentDownload setObject:dataDownload forKey:@(dataDownload.identifier)];
     }
-    
-    [self.coreDataManager save:nil];
 }
 
 @end
