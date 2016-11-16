@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataDownload.h"
 
 @interface DownloadCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *progressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
+
+@property (strong, nonatomic) DataDownload* dataDownload;
 
 @end

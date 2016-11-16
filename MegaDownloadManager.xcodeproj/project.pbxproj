@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84235C861DDC4CEF00337939 /* SearchHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84235C831DDC4CEF00337939 /* SearchHistory.m */; };
+		84235C871DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84235C851DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m */; };
 		8436F53F1DDB78B500BB65C4 /* DataDownloadCoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = 8436F53C1DDB78B500BB65C4 /* DataDownloadCoreData.m */; };
 		8436F5401DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 8436F53E1DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m */; };
 		843FF8AF1DDAF854008B8B27 /* DataDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 843FF8AE1DDAF854008B8B27 /* DataDownload.m */; };
@@ -24,6 +26,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		84235C821DDC4CEF00337939 /* SearchHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchHistory.h; sourceTree = "<group>"; };
+		84235C831DDC4CEF00337939 /* SearchHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchHistory.m; sourceTree = "<group>"; };
+		84235C841DDC4CEF00337939 /* SearchHistory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SearchHistory+CoreDataProperties.h"; sourceTree = "<group>"; };
+		84235C851DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SearchHistory+CoreDataProperties.m"; sourceTree = "<group>"; };
 		8436F53B1DDB78B500BB65C4 /* DataDownloadCoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataDownloadCoreData.h; sourceTree = "<group>"; };
 		8436F53C1DDB78B500BB65C4 /* DataDownloadCoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataDownloadCoreData.m; sourceTree = "<group>"; };
 		8436F53D1DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DataDownloadCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -121,6 +127,10 @@
 			isa = PBXGroup;
 			children = (
 				84AD607D1DD9D68A00D8C912 /* Model.xcdatamodeld */,
+				84235C821DDC4CEF00337939 /* SearchHistory.h */,
+				84235C831DDC4CEF00337939 /* SearchHistory.m */,
+				84235C841DDC4CEF00337939 /* SearchHistory+CoreDataProperties.h */,
+				84235C851DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m */,
 				8436F53B1DDB78B500BB65C4 /* DataDownloadCoreData.h */,
 				8436F53C1DDB78B500BB65C4 /* DataDownloadCoreData.m */,
 				8436F53D1DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.h */,
@@ -217,6 +227,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84235C861DDC4CEF00337939 /* SearchHistory.m in Sources */,
 				84721E181DCC6F2E00014F87 /* ViewController.m in Sources */,
 				84AD60961DD9DFA500D8C912 /* CoreDataManager.m in Sources */,
 				843FF8AF1DDAF854008B8B27 /* DataDownload.m in Sources */,
@@ -227,6 +238,7 @@
 				8436F53F1DDB78B500BB65C4 /* DataDownloadCoreData.m in Sources */,
 				84721E291DCC70FD00014F87 /* DownloadManager.m in Sources */,
 				8436F5401DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m in Sources */,
+				84235C871DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m in Sources */,
 				84721E341DCCB6DB00014F87 /* DownloadCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

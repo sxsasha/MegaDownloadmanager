@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "DataDownloadCoreData.h"
+#import "SearchHistory.h"
 
 @interface CoreDataManager : NSObject
 
@@ -17,10 +18,16 @@
 @property (strong, nonatomic) NSPersistentStoreCoordinator* persistentStoreCoordinator;
 
 +(CoreDataManager*) sharedManager;
+
 -(DataDownloadCoreData*) addDataDownload;
--(void) deleteAll;
--(void) deleteDataDownload: (DataDownloadCoreData*) dataDownload;
 -(NSArray*) getAllDataDownloads;
+-(void) deleteAllDataDownload;
+
+-(SearchHistory*) addSearchRequest: (NSString*) string count: (int16_t)count atTime: (NSDate*) date;
+-(NSArray*) getAllSearchHistory;
+-(void) deleteAllSearchHistory;
+
+-(void) deleteEntity: (NSManagedObject*) object;
 -(BOOL) save: (NSError**) errorWithSave;
 
 

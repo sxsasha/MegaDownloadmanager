@@ -39,7 +39,8 @@
     NSURL* url = [NSURL URLWithString:urlString];
     if (url)
     {
-        NSURLSessionDownloadTask* sessionTask = [self.defaultSession downloadTaskWithURL:url];
+        NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.f];
+        NSURLSessionDownloadTask* sessionTask = [self.defaultSession downloadTaskWithRequest:request];
         sessionTask.taskDescription = urlString;
         [self.arrayOfDataTask addObject:sessionTask];
         [sessionTask resume];

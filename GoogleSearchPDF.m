@@ -7,6 +7,7 @@
 //
 
 #import "GoogleSearchPDF.h"
+#import "CoreDataManager.h"
 
 #define GoogleAPI @"AIzaSyBIhTNx9XFK3dlLfKHRgnL8Ucx-8juCqbk"
 #define GoogleSearchID @"013242499754616033066:azpci6bcd9s"
@@ -14,8 +15,10 @@
 @interface GoogleSearchPDF ()
 
 @property (nonatomic,strong) dispatch_queue_t queue;
-@property (nonatomic,assign) NSInteger startIndex;
 @property (nonatomic,strong) NSURLSessionDataTask* dataTask;
+
+@property (nonatomic,strong) NSMutableArray* arrayOfSearchHistory;
+@property (nonatomic,strong) CoreDataManager* coreDataManager;
 @end
 
 @implementation GoogleSearchPDF
@@ -28,7 +31,11 @@
         manager = [[GoogleSearchPDF alloc]init];
         manager.delegate = delegate;
         manager.queue = dispatch_queue_create("GoogleSearchPDF", DISPATCH_QUEUE_SERIAL);
-        manager.startIndex = 1;// + (arc4random() % 90);
+        manager.coreDataManager = [CoreDataManager sharedManager];
+        
+        manager.arrayOfSearchHistory = [NSMutableArray array];
+        [manager.arrayOfSearchHistory addObjectsFromArray:[manager.coreDataManager getAllSearchHistory]];
+        
     });
     
     return manager;
@@ -36,14 +43,34 @@
 
 - (void) getTenPDFLinksWithSearchString: (NSString*) searchString
 {
-    dispatch_async(self.queue, ^{
-        [self createRequest:searchString];
-    });
+    if ([self checkSearchRequest:searchString])
+    {
+        dispatch_async(self.queue, ^{
+            [self createRequest:searchString];
+        });
+    }
 }
 
 - (void) createRequest: (NSString*) searchString
 {
-    NSString* urlString = [NSString stringWithFormat:@"https://www.googleapis.com/customsearch/v1?q=%@&fileType=pdf&filter=1&cx=%@&key=%@&start=%ld", searchString,GoogleSearchID,GoogleAPI,self.startIndex];
+    SearchHistory* foundHistory = nil;
+    for (SearchHistory* history in self.arrayOfSearchHistory)
+    {
+        if([history.searchString isEqualToString:searchString])
+        {
+            history.getCount = history.getCount + 10;
+            history.time = [NSDate date];
+            foundHistory = history;
+            break;
+        }
+    }
+    if (!foundHistory)
+    {
+       foundHistory = [self.coreDataManager addSearchRequest:searchString count:1 atTime:[NSDate date]];
+        [self.arrayOfSearchHistory addObject:foundHistory];
+    }
+    
+    NSString* urlString = [NSString stringWithFormat:@"https://www.googleapis.com/customsearch/v1?q=%@&fileType=pdf&filter=1&cx=%@&key=%@&start=%d", searchString,GoogleSearchID,GoogleAPI,foundHistory.getCount];
     
     NSURL* url = [NSURL URLWithString:urlString];
     
@@ -71,6 +98,25 @@
         [array addObject:dictionary[@"link"]];
     }
     [self.delegate givePDFLink:array];
+    [self.coreDataManager save:nil];
+}
+
+#pragma mark - Help Methods
+
+- (BOOL) checkSearchRequest: (NSString*) string
+{
+    NSCharacterSet* forbiddenSet = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789"] invertedSet];
+    
+    BOOL isForbidden = ([string rangeOfCharacterFromSet:forbiddenSet].location != NSNotFound)
+    || (([string isEqualToString:@""])
+    ||([string rangeOfString:@" "].location != NSNotFound));
+    
+    if (isForbidden)
+    {
+        return NO;
+    }
+
+    return YES;
 }
 
 @end

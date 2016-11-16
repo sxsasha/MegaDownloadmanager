@@ -10,7 +10,7 @@
 #import "DataDownloadCoreData.h"
 #import "CoreDataManager.h"
 
-@class DownloadCell;
+//@class DownloadCell;
 
 @interface DataDownload : NSObject
 
@@ -20,8 +20,10 @@
 @property (nonatomic,   strong) NSString *localURL;
 @property (nonatomic,   assign) double progress;
 @property (nonatomic,   assign) BOOL isComplate;
+@property (nonatomic,   assign) BOOL isDownloading;
 
-@property (nonatomic,   strong) DownloadCell* cell;
+
+//@property (nonatomic,   strong) DownloadCell* cell;
 @property (nonatomic,   strong) DataDownloadCoreData* dataDownloadCoreData;
 @property (nonatomic,   strong) CoreDataManager* coreDataManager;
 

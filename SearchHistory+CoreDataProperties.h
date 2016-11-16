@@ -6,7 +6,7 @@
 //  Copyright © 2016 admin. All rights reserved.
 //
 
-#import "SearchHistory+CoreDataClass.h"
+#import "SearchHistory.h"
 
 
 NS_ASSUME_NONNULL_BEGIN

@@ -36,7 +36,7 @@
 
 - (void)dealloc
 {
-    [self.coreDataManager deleteDataDownload:self.dataDownloadCoreData];
+    [self.coreDataManager deleteEntity:self.dataDownloadCoreData];
 }
 
 #pragma mark - Setters & Getters
@@ -44,6 +44,13 @@
 {
     //gen name, replace space with _
     NSString* name = [[urlString lastPathComponent] stringByRemovingPercentEncoding];
+    
+    NSRange extension = NSMakeRange([name length] - 3, 3);
+    if (![[name substringWithRange:extension] isEqualToString:@"pdf"])
+    {
+        name = [name stringByAppendingString:@".pdf"];
+    }
+    
     NSArray* isHaveSpace = [name componentsSeparatedByString:@" "];
     self.name = [isHaveSpace componentsJoinedByString:@"_"];
 
@@ -62,9 +69,9 @@
 {
     _isComplate = isComplate;
     
-    self.dataDownloadCoreData.isComplate = @(_isComplate);
-    if (isComplate)
+    if ((isComplate)&&(![self.dataDownloadCoreData.isComplate boolValue]))
     {
+        self.dataDownloadCoreData.isComplate = @(_isComplate);
         [self.coreDataManager save:nil];
     }
 }
@@ -92,7 +99,7 @@
     {
         DataDownload* dataDownload = [[DataDownload alloc] initWithDataDownload:obj];
         dataDownload.urlString = obj.urlString;
-        dataDownload.isComplate = obj.isComplate;
+        dataDownload.isComplate = [obj.isComplate boolValue];
 
         [array addObject:dataDownload];
     }

@@ -17,6 +17,7 @@
 @interface GoogleSearchPDF : NSObject
 
 @property (nonatomic,weak) id <GotPDFLinksDelegate> delegate;
+
 +(GoogleSearchPDF*) sharedManagerWithDelegate: (id <GotPDFLinksDelegate>) delegate;
 
 - (void) getTenPDFLinksWithSearchString: (NSString*) searchString;

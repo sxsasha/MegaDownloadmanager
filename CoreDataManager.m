@@ -86,7 +86,9 @@
 }
 
 #pragma mark - Work with Core Data Entity
-
+#pragma mark -
+#pragma mark -
+#pragma mark - Work with Data Download
 -(DataDownloadCoreData*) addDataDownload
 {
     DataDownloadCoreData *newDownload = [NSEntityDescription insertNewObjectForEntityForName:@"DataDownload" inManagedObjectContext:self.managedObjectContext];
@@ -94,12 +96,7 @@
     return newDownload;
 }
 
-- (BOOL) save: (NSError**) errorWithSave
-{
-    return  [self.managedObjectContext save:errorWithSave];
-}
-
--(void) deleteAll
+-(void) deleteAllDataDownload
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"DataDownload"];
     NSArray* allDataDownloads = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
@@ -118,16 +115,62 @@
     fetchRequest.includesSubentities = YES;
     fetchRequest.includesPropertyValues = YES;
     fetchRequest.returnsObjectsAsFaults = NO;
-    //fetchRequest.relationshipKeyPathsForPrefetching = @[];
     
     NSArray* allDataDownloads = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
     
     return allDataDownloads;
 }
 
--(void) deleteDataDownload: (DataDownloadCoreData*) dataDownload
+#pragma mark - Work with search history
+
+-(SearchHistory*) addSearchRequest: (NSString*) string count: (int16_t)count atTime: (NSDate*) date
 {
-    [self.managedObjectContext deleteObject:dataDownload];
+    SearchHistory *newSearchRequest = [NSEntityDescription insertNewObjectForEntityForName:@"SearchHistory" inManagedObjectContext:self.managedObjectContext];
+    
+    newSearchRequest.searchString = string;
+    newSearchRequest.getCount = count;
+    newSearchRequest.time = date;
+    
+    [self save:nil];
+    
+    return newSearchRequest;
+}
+
+-(NSArray*) getAllSearchHistory
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"SearchHistory"];
+    
+    fetchRequest.resultType = NSManagedObjectResultType;
+    fetchRequest.includesSubentities = YES;
+    fetchRequest.includesPropertyValues = YES;
+    fetchRequest.returnsObjectsAsFaults = NO;
+    
+    NSArray* allDataDownloads = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    
+    return allDataDownloads;
+}
+
+-(void) deleteAllSearchHistory
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"SearchHistory"];
+    NSArray* allDataDownloads = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    
+    for (NSManagedObject *managedObject in allDataDownloads)
+    {
+        [_managedObjectContext deleteObject:managedObject];
+    }
+}
+
+#pragma mark - main Methods
+
+-(void) deleteEntity: (NSManagedObject*) object
+{
+    [self.managedObjectContext deleteObject:object];
+}
+
+- (BOOL) save: (NSError**) errorWithSave
+{
+    return  [self.managedObjectContext save:errorWithSave];
 }
 
 @end
