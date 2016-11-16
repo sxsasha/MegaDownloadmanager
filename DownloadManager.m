@@ -34,7 +34,7 @@
     return manager;
 }
 
--(int16_t) downloadWithURL: (NSString*) urlString
+-(NSURLSessionDownloadTask*) downloadWithURL: (NSString*) urlString
 {
     NSURL* url = [NSURL URLWithString:urlString];
     if (url)
@@ -44,7 +44,7 @@
         sessionTask.taskDescription = urlString;
         [self.arrayOfDataTask addObject:sessionTask];
         [sessionTask resume];
-        return (int16_t)sessionTask.taskIdentifier;
+        return sessionTask;
     }
     return 0;
 }
@@ -57,8 +57,14 @@
  totalBytesWritten:(int64_t)totalBytesWritten
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    [self.delegate progressDownload:((double)totalBytesWritten / (double)totalBytesExpectedToWrite)
-                         identifier:(int16_t)downloadTask.taskIdentifier];
+    double progress = (double)totalBytesWritten / (double)totalBytesExpectedToWrite;
+    NSString* downloaded = [self getReadableFormat:totalBytesWritten];
+    NSString* expectedSize = [self getReadableFormat:totalBytesExpectedToWrite];
+    NSString* size = [NSString stringWithFormat:@"%@/%@",downloaded,expectedSize];
+    
+    [self.delegate progressDownload:progress
+                         identifier:(int16_t)downloadTask.taskIdentifier
+                    totalDownloaded:size];
 }
 
 - (void)URLSession:(NSURLSession *)session
@@ -67,6 +73,21 @@ didFinishDownloadingToURL:(NSURL *)location
 {
     [self.delegate complateDownloadInURL:location
                               identifier:(int16_t)downloadTask.taskIdentifier];
+}
+
+#pragma mark - Help methods
+
+- (NSString*) getReadableFormat:(int64_t) bytes
+{
+    NSArray* array = @[@"b",@"kb",@"mb",@"gb",@"tb"];
+    int64_t xBytes = bytes;
+    int i = 0;
+    while (xBytes < 1024)
+    {
+        xBytes = xBytes / 1024;
+        i = i + 1;
+    }
+    return [NSString stringWithFormat:@"%lld%@",((long long  int)xBytes),[array objectAtIndex:i] ];
 }
 
 @end

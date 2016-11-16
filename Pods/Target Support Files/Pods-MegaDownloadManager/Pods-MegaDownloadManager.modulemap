@@ -1,0 +1,6 @@
+framework module Pods_MegaDownloadManager {
+  umbrella header "Pods-MegaDownloadManager-umbrella.h"
+
+  export *
+  module * { export * }
+}

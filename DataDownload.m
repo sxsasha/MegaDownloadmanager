@@ -106,4 +106,14 @@
     return array;
 }
 
+- (void) removeFromDatabase
+{
+    [self.coreDataManager deleteEntity:self.dataDownloadCoreData];
+    NSURL* localURL = [NSURL URLWithString:self.localURL];
+    [[NSFileManager defaultManager] removeItemAtURL:localURL error:nil];
+    self.dataDownloadCoreData = nil;
+    
+    [self.coreDataManager save:nil];
+}
+
 @end

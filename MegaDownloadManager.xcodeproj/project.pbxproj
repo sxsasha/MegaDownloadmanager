@@ -20,6 +20,8 @@
 		84721E201DCC6F2E00014F87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84721E1E1DCC6F2E00014F87 /* LaunchScreen.storyboard */; };
 		84721E291DCC70FD00014F87 /* DownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84721E281DCC70FD00014F87 /* DownloadManager.m */; };
 		84721E341DCCB6DB00014F87 /* DownloadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84721E331DCCB6DB00014F87 /* DownloadCell.m */; };
+		847A5B1A1DDC8A9500A4063E /* UIScrollView+EmptyDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A5B191DDC8A9500A4063E /* UIScrollView+EmptyDataSet.m */; };
+		847A5B261DDC8FF500A4063E /* emptyPlaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 847A5B251DDC8FF500A4063E /* emptyPlaceholder.png */; };
 		84AD607F1DD9D68A00D8C912 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84AD607D1DD9D68A00D8C912 /* Model.xcdatamodeld */; };
 		84AD60961DD9DFA500D8C912 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD60951DD9DFA500D8C912 /* CoreDataManager.m */; };
 		84B855621DD06B0B00F2E5D3 /* GoogleSearchPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B855611DD06B0B00F2E5D3 /* GoogleSearchPDF.m */; };
@@ -50,6 +52,9 @@
 		84721E281DCC70FD00014F87 /* DownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DownloadManager.m; path = ../DownloadManager.m; sourceTree = "<group>"; };
 		84721E321DCCB6DB00014F87 /* DownloadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DownloadCell.h; path = ../DownloadCell.h; sourceTree = "<group>"; };
 		84721E331DCCB6DB00014F87 /* DownloadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DownloadCell.m; path = ../DownloadCell.m; sourceTree = "<group>"; };
+		847A5B181DDC8A9500A4063E /* UIScrollView+EmptyDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+EmptyDataSet.h"; sourceTree = "<group>"; };
+		847A5B191DDC8A9500A4063E /* UIScrollView+EmptyDataSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+EmptyDataSet.m"; sourceTree = "<group>"; };
+		847A5B251DDC8FF500A4063E /* emptyPlaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emptyPlaceholder.png; sourceTree = "<group>"; };
 		84AD607E1DD9D68A00D8C912 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		84AD60851DD9D87900D8C912 /* MegaDownloadManager-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MegaDownloadManager-Bridging-Header.h"; sourceTree = "<group>"; };
 		84AD60941DD9DFA500D8C912 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoreDataManager.h; path = ../CoreDataManager.h; sourceTree = "<group>"; };
@@ -96,6 +101,8 @@
 				84721E331DCCB6DB00014F87 /* DownloadCell.m */,
 				84721E131DCC6F2E00014F87 /* AppDelegate.h */,
 				84721E141DCC6F2E00014F87 /* AppDelegate.m */,
+				847A5B181DDC8A9500A4063E /* UIScrollView+EmptyDataSet.h */,
+				847A5B191DDC8A9500A4063E /* UIScrollView+EmptyDataSet.m */,
 				84721E191DCC6F2E00014F87 /* Main.storyboard */,
 				84721E1C1DCC6F2E00014F87 /* Assets.xcassets */,
 				84721E1E1DCC6F2E00014F87 /* LaunchScreen.storyboard */,
@@ -108,6 +115,7 @@
 		84721E101DCC6F2E00014F87 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				847A5B251DDC8FF500A4063E /* emptyPlaceholder.png */,
 				84721E111DCC6F2E00014F87 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -217,6 +225,7 @@
 				84721E201DCC6F2E00014F87 /* LaunchScreen.storyboard in Resources */,
 				84721E1D1DCC6F2E00014F87 /* Assets.xcassets in Resources */,
 				84721E1B1DCC6F2E00014F87 /* Main.storyboard in Resources */,
+				847A5B261DDC8FF500A4063E /* emptyPlaceholder.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +242,7 @@
 				843FF8AF1DDAF854008B8B27 /* DataDownload.m in Sources */,
 				84721E151DCC6F2E00014F87 /* AppDelegate.m in Sources */,
 				84721E121DCC6F2E00014F87 /* main.m in Sources */,
+				847A5B1A1DDC8A9500A4063E /* UIScrollView+EmptyDataSet.m in Sources */,
 				84AD607F1DD9D68A00D8C912 /* Model.xcdatamodeld in Sources */,
 				84B855621DD06B0B00F2E5D3 /* GoogleSearchPDF.m in Sources */,
 				8436F53F1DDB78B500BB65C4 /* DataDownloadCoreData.m in Sources */,

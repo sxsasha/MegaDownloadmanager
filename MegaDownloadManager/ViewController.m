@@ -14,7 +14,7 @@
 
 #define timeToUpdate 0.04  //25 framerate
 
-@interface ViewController () <DownloadTasksDelegate, UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate,UISearchBarDelegate>
+@interface ViewController () <DownloadTasksDelegate, UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate,UISearchBarDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 
 @property (nonatomic,strong) NSMutableArray* arrayOfDataDownload;
 @property (nonatomic,strong) NSMutableDictionary* dictionaryOfCurrentDownload;
@@ -32,6 +32,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // empty tableView
+    self.tableView.emptyDataSetSource = self;
+    self.tableView.emptyDataSetDelegate = self;
+    // A little trick for removing the cell separators
+    self.tableView.tableFooterView = [UIView new];
+    
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
+    
     [self initALL];
 }
 
@@ -42,6 +51,10 @@
 
 - (void) initALL
 {
+    NSURL* documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                                  inDomains:NSUserDomainMask] lastObject];
+    NSLog(@"documentsURL: %@", documentsURL);
+    
     self.downloadManager = [DownloadManager sharedManagerWithDelegate:self];
     self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
     
@@ -115,14 +128,17 @@
     DataDownload* dataDownload = [self.dictionaryOfCurrentDownload objectForKey:@(identifier)];
     dataDownload.progress = 1.0f;
     dataDownload.isComplate = YES;
+    dataDownload.isDownloading = NO;
     NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
     [[NSFileManager defaultManager] moveItemAtURL:url toURL:localURL error:nil];
 }
-
--(void) progressDownload:(double)progress identifier:(int16_t)identifier
+-(void) progressDownload: (double) progress
+              identifier: (int16_t) identifier
+         totalDownloaded: (NSString*) downloaded
 {
     DataDownload* dataDownload = [self.dictionaryOfCurrentDownload objectForKey:@(identifier)];
     dataDownload.progress = progress;
+    dataDownload.downloaded = downloaded;
 }
 
 #pragma mark - UITableViewDataSource
@@ -140,25 +156,6 @@
     if (!cell)
     {
         cell = [[DownloadCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-//        CALayer *layer = tableView.layer;
-//        [layer setMasksToBounds:YES];
-//        [layer setCornerRadius: 4.0];
-//        [layer setBorderWidth:1.0];
-//        [layer setBorderColor:[[UIColor redColor] CGColor]];
-////
-//        cell.layer.shadowOffset = CGSizeMake(1, 0);
-//        cell.layer.shadowColor = [[UIColor blackColor] CGColor];
-//        cell.layer.shadowRadius = 5;
-//        cell.layer.shadowOpacity = .25;
-        
-        cell.layer.shadowOpacity = 1.0;
-        cell.layer.shadowRadius = 1;
-        cell.layer.shadowOffset = CGSizeMake(0, 2);
-        cell.layer.shadowColor = UIColor.blackColor.CGColor;
-        
-//        cell.layer.borderWidth = 10.2;
-//        cell.layer.cornerRadius = 10;
-//        cell.layer.backgroundColor = [[UIColor redColor] CGColor];
     }
     
     cell.dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
@@ -200,13 +197,79 @@
         
         [self.navigationController pushViewController:viewController animated:YES];
         dataDownload.isComplate = YES;
+        dataDownload.isDownloading = NO;
     }
     else if (!dataDownload.isDownloading)
     {
-        dataDownload.identifier = [self.downloadManager downloadWithURL:dataDownload.urlString];
+        dataDownload.downloadTask = [self.downloadManager downloadWithURL:dataDownload.urlString];
+        dataDownload.identifier = (int16_t)dataDownload.downloadTask.taskIdentifier;
         dataDownload.isDownloading = YES;
         [self.dictionaryOfCurrentDownload setObject:dataDownload forKey:@(dataDownload.identifier)];
     }
+    else if (dataDownload.isDownloading)
+    {
+        if (dataDownload.downloadTask.state == NSURLSessionTaskStateRunning)
+        {
+            [dataDownload.downloadTask suspend];
+        }
+        else if (dataDownload.downloadTask.state == NSURLSessionTaskStateSuspended)
+        {
+            [dataDownload.downloadTask resume];
+        }
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+        
+        [self.arrayOfDataDownload removeObject:dataDownload];
+        [dataDownload removeFromDatabase];
+        dataDownload = nil;
+        
+        [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+    }
+}
+#pragma mark - DZNEmptyDataSetSource & DZNEmptyDataSetDelegate
+
+- (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
+{
+    return [UIImage imageNamed:@"emptyPlaceholder.png"];
+}
+
+//The attributed string for the title of the empty state
+- (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView
+{
+    NSString *text = @"Please trying search something";
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0f],
+                                 NSForegroundColorAttributeName: [UIColor darkGrayColor]};
+    
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
+}
+
+//The attributed string for the description of the empty state
+- (NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView
+{
+    NSString *text = @"Program trying search this in Google like pdf and u can download it and watch.";
+    
+    NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
+    paragraph.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraph.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
+                                 NSForegroundColorAttributeName: [UIColor lightGrayColor],
+                                 NSParagraphStyleAttributeName: paragraph};
+    
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
 
 @end

@@ -11,7 +11,9 @@
 
 @protocol DownloadTasksDelegate <NSObject>
 
--(void) progressDownload: (double) progress identifier: (int16_t) identifier;
+-(void) progressDownload: (double) progress
+              identifier: (int16_t) identifier
+         totalDownloaded: (NSString*) totalString;
 -(void) complateDownloadInURL:(NSURL*) url identifier: (int16_t) identifier;
 
 @end
@@ -25,6 +27,6 @@
 @property (nonatomic,weak) id <DownloadTasksDelegate> delegate;
 
 +(DownloadManager*) sharedManagerWithDelegate: (id <DownloadTasksDelegate>) delegate;
--(int16_t) downloadWithURL: (NSString*) urlString;
+-(NSURLSessionDownloadTask*) downloadWithURL: (NSString*) urlString;
 
 @end
