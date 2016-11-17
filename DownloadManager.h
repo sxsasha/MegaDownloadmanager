@@ -23,7 +23,6 @@
 @interface DownloadManager : NSObject <NSURLSessionDownloadDelegate>
 
 @property (nonatomic,strong) NSURLSession* defaultSession;
-@property (nonatomic,strong) NSMutableArray* arrayOfDataTask;
 @property (nonatomic,weak) id <DownloadTasksDelegate> delegate;
 
 +(DownloadManager*) sharedManagerWithDelegate: (id <DownloadTasksDelegate>) delegate;

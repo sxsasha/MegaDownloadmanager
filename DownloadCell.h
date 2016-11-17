@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UILabel *sizeProgressLabel;
 
-@property (strong, nonatomic) DataDownload* dataDownload;
+@property (weak, nonatomic) DataDownload* dataDownload;
+
+- (void) removeAllObserver;
 
 @end

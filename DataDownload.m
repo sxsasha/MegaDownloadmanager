@@ -36,7 +36,7 @@
 
 - (void)dealloc
 {
-    [self.coreDataManager deleteEntity:self.dataDownloadCoreData];
+
 }
 
 #pragma mark - Setters & Getters

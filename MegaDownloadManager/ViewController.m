@@ -12,7 +12,7 @@
 #import "DownloadCell.h"
 #import "GoogleSearchPDF.h"
 
-#define timeToUpdate 0.04  //25 framerate
+//#define timeToUpdate 0.04  //25 framerate
 
 @interface ViewController () <DownloadTasksDelegate, UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate,UISearchBarDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 
@@ -33,15 +33,9 @@
 {
     [super viewDidLoad];
     
-    // empty tableView
-    self.tableView.emptyDataSetSource = self;
-    self.tableView.emptyDataSetDelegate = self;
-    // A little trick for removing the cell separators
-    self.tableView.tableFooterView = [UIView new];
-    
-    self.tableView.allowsMultipleSelectionDuringEditing = YES;
-    
+    [self emptyTableView];
     [self initALL];
+    [self setupSearchBar];
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,12 +43,19 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void) emptyTableView
+{
+    // For EmptyDataSet
+    // empty tableView
+    self.tableView.emptyDataSetSource = self;
+    self.tableView.emptyDataSetDelegate = self;
+    // A little trick for removing the cell separators
+    self.tableView.tableFooterView = [UIView new];
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
+}
+
 - (void) initALL
 {
-    NSURL* documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                                  inDomains:NSUserDomainMask] lastObject];
-    NSLog(@"documentsURL: %@", documentsURL);
-    
     self.downloadManager = [DownloadManager sharedManagerWithDelegate:self];
     self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
     
@@ -63,15 +64,30 @@
     
     NSArray* dataDownloadsFromDatabase = [DataDownload getAllDataDownloadFromaDatabase];
     [self.arrayOfDataDownload addObjectsFromArray:dataDownloadsFromDatabase];
-    
+}
+
+- (void) setupSearchBar
+{
     self.searchBar = [[UISearchBar alloc] init];
     self.searchBar.placeholder = @"Type search request";
     self.searchBar.delegate = self;
     self.navigationItem.titleView = self.searchBar;
+    self.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.searchBar.spellCheckingType = UITextSpellCheckingTypeNo;
+    self.searchBar.keyboardType = UIKeyboardTypeWebSearch;
+    self.searchBar.enablesReturnKeyAutomatically = NO;
+    self.searchBar.returnKeyType = UIReturnKeySearch;
+}
+
+
+#pragma mark - UISearchBarDelegate
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [self.searchPDFmanager getTenPDFLinksWithSearchString:self.searchBar.text];
 }
 
 #pragma mark - Actions
-
 - (IBAction)addMorePDFLinks:(UIBarButtonItem *)sender
 {
     [self.searchPDFmanager getTenPDFLinksWithSearchString:self.searchBar.text];
@@ -167,13 +183,14 @@
     0.f: cell.dataDownload.progress*100;
     cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
     [cell.progressView setProgress:cell.dataDownload.progress animated:NO];
+    cell.sizeProgressLabel.text = cell.dataDownload.downloaded;
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50.f;
+    return 60.f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -227,10 +244,14 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+        DownloadCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [cell removeAllObserver];
         
+        DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
         [self.arrayOfDataDownload removeObject:dataDownload];
         [dataDownload removeFromDatabase];
+        [dataDownload.downloadTask cancel];
+        
         dataDownload = nil;
         
         [self.tableView beginUpdates];

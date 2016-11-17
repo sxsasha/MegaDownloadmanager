@@ -9,7 +9,7 @@
 #import "DownloadManager.h"
 
 
-#define maxConcurentDownload 15
+#define maxConcurentDownload 10
 
 @implementation DownloadManager
 
@@ -21,14 +21,12 @@
         manager = [[DownloadManager alloc]init];
         NSOperationQueue* ourQueue = [[NSOperationQueue alloc]init];
         ourQueue.maxConcurrentOperationCount = maxConcurentDownload;
-        ourQueue.qualityOfService = NSQualityOfServiceUserInitiated;
         
         NSURLSessionConfiguration* sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
         manager.defaultSession = [NSURLSession sessionWithConfiguration:sessionConfig
                                                                delegate:manager
                                                           delegateQueue:ourQueue];
         manager.delegate = delegate;
-        manager.arrayOfDataTask = [NSMutableArray array];
     });
     
     return manager;
@@ -39,10 +37,9 @@
     NSURL* url = [NSURL URLWithString:urlString];
     if (url)
     {
-        NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.f];
+        NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.f];
         NSURLSessionDownloadTask* sessionTask = [self.defaultSession downloadTaskWithRequest:request];
         sessionTask.taskDescription = urlString;
-        [self.arrayOfDataTask addObject:sessionTask];
         [sessionTask resume];
         return sessionTask;
     }
@@ -79,13 +76,18 @@ didFinishDownloadingToURL:(NSURL *)location
 
 - (NSString*) getReadableFormat:(int64_t) bytes
 {
-    NSArray* array = @[@"b",@"kb",@"mb",@"gb",@"tb"];
+    NSArray* array = @[@"b",@"kb",@"mb",@"gb",@"tb",@"pb"];
     int64_t xBytes = bytes;
     int i = 0;
-    while (xBytes < 1024)
+    while (xBytes > 1024)
     {
         xBytes = xBytes / 1024;
         i = i + 1;
+    }
+    
+    if (i >= [array count])
+    {
+        i = [array count] - 1;
     }
     return [NSString stringWithFormat:@"%lld%@",((long long  int)xBytes),[array objectAtIndex:i] ];
 }
