@@ -11,6 +11,7 @@
 @protocol GotPDFLinksDelegate <NSObject>
 
 - (void) givePDFLink: (NSArray <NSString*> *) link;
+- (void) errorWithSearchString: (NSString*) string;
 
 @end
 

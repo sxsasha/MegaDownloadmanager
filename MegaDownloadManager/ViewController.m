@@ -24,6 +24,7 @@
 
 @property (nonatomic,strong) UIWebView* webView;
 @property (strong, nonatomic) UISearchBar* searchBar;
+@property (strong, nonatomic) UITextField* searchField;
 
 @end
 
@@ -33,6 +34,7 @@
 {
     [super viewDidLoad];
     
+
     [self emptyTableView];
     [self initALL];
     [self setupSearchBar];
@@ -78,6 +80,17 @@
     self.searchBar.keyboardType = UIKeyboardTypeWebSearch;
     self.searchBar.enablesReturnKeyAutomatically = NO;
     self.searchBar.returnKeyType = UIReturnKeySearch;
+    
+    UIView* view = [self.searchBar.subviews firstObject];
+    NSUInteger numViews = [view.subviews count];
+    for(int i = 0; i < numViews; i++)
+    {
+        if([[view.subviews objectAtIndex:i] isKindOfClass:[UITextField class]])
+        {
+            self.searchField = [view.subviews objectAtIndex:i];
+        }
+    }
+    
 }
 
 
@@ -95,24 +108,10 @@
 
 #pragma mark - Help Methods
 
-//- (void) updateDownloadCell: (DataDownload*) dataDownload
-//{
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if (!dataDownload.isComplate)
-//        {
-//            double percent = (((dataDownload.progress*100) < 0)||((dataDownload.progress*100) > 100)) ?
-//            0.f: dataDownload.progress*100;
-//            dataDownload.cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
-//            [dataDownload.cell.progressView setProgress:dataDownload.progress animated:YES];
-//            return;
-//        }
-//        else
-//        {
-//            dataDownload.cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",100.0];
-//            [dataDownload.cell.progressView setProgress:1.f animated:YES];
-//        }
-//    });
-//}
+- (double) percentFromProgress: (double) progress
+{
+    return (((progress*100) < 0)||((progress*100) > 100)) ? 0.f: progress*100;
+}
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -135,6 +134,15 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
+}
+
+-(void) errorWithSearchString:(NSString *)string
+{
+    [UIView animateWithDuration:0.3f animations:^{
+        self.searchField.backgroundColor = [UIColor redColor];
+    } completion:^(BOOL finished){
+        self.searchField.backgroundColor = nil;
+    }];
 }
 
 #pragma mark - DownloadTasksDelegate
@@ -176,14 +184,17 @@
     
     cell.dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
     
-    cell.nameLabel.text = cell.dataDownload.name;
-    
+    // set up cell
     cell.dataDownload.progress = (double)cell.dataDownload.isComplate;
-    double percent = (((cell.dataDownload.progress*100) < 0)||((cell.dataDownload.progress*100) > 100)) ?
-    0.f: cell.dataDownload.progress*100;
+    
+    double percent = [self percentFromProgress:cell.dataDownload.progress];
     cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
-    [cell.progressView setProgress:cell.dataDownload.progress animated:NO];
+    
+    cell.nameLabel.text = cell.dataDownload.name;
+
     cell.sizeProgressLabel.text = cell.dataDownload.downloaded;
+    
+    [cell.progressView setProgress:cell.dataDownload.progress animated:NO];
     
     return cell;
 }

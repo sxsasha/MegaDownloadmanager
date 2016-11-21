@@ -49,6 +49,10 @@
             [self createRequest:searchString];
         });
     }
+    else
+    {
+        [self.delegate errorWithSearchString:searchString];
+    }
 }
 
 - (void) createRequest: (NSString*) searchString
@@ -69,23 +73,32 @@
        foundHistory = [self.coreDataManager addSearchRequest:searchString count:1 atTime:[NSDate date]];
         [self.arrayOfSearchHistory addObject:foundHistory];
     }
+
+    searchString = [searchString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
     
     NSString* urlString = [NSString stringWithFormat:@"https://www.googleapis.com/customsearch/v1?q=%@&fileType=pdf&filter=1&cx=%@&key=%@&start=%d", searchString,GoogleSearchID,GoogleAPI,foundHistory.getCount];
     
     NSURL* url = [NSURL URLWithString:urlString];
-    
-    NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.f];
-
-    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+    if (url)
     {
-        NSError* errorWithDeSerialization;
-        NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorWithDeSerialization];
+        NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.f];
         
-        if ((!errorWithDeSerialization)&&(dictionary))
-        {
-            [self parseDict:dictionary];
-        }
-    }] resume];
+        [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+          {
+              NSError* errorWithDeSerialization;
+              NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorWithDeSerialization];
+              
+              if ((!errorWithDeSerialization)&&(dictionary))
+              {
+                  [self parseDict:dictionary];
+              }
+          }] resume];
+    }
+    else
+    {
+        [self.delegate errorWithSearchString:searchString];
+    }
+    
 }
 
 -(void) parseDict: (NSDictionary*) dict
@@ -105,11 +118,12 @@
 
 - (BOOL) checkSearchRequest: (NSString*) string
 {
-    NSCharacterSet* forbiddenSet = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789"] invertedSet];
+    NSMutableCharacterSet* nonForbiddenSet =[NSMutableCharacterSet alphanumericCharacterSet];
+    [nonForbiddenSet addCharactersInString:@" "];
+    NSCharacterSet* forbiddenSet = [nonForbiddenSet invertedSet];
     
     BOOL isForbidden = ([string rangeOfCharacterFromSet:forbiddenSet].location != NSNotFound)
-    || (([string isEqualToString:@""])
-    ||([string rangeOfString:@" "].location != NSNotFound));
+    || (([string isEqualToString:@""]));
     
     if (isForbidden)
     {
@@ -118,5 +132,7 @@
 
     return YES;
 }
+
+
 
 @end
