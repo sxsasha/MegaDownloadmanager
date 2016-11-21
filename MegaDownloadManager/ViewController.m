@@ -12,16 +12,20 @@
 #import "DownloadCell.h"
 #import "GoogleSearchPDF.h"
 
-#define timeToUpdate 0.04  //25 framerate
+//#define timeToUpdate 0.04  //25 framerate
 
-@interface ViewController () <DownloadTasksDelegate, UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate,UISearchBarDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 
 @property (nonatomic,strong) NSMutableArray* arrayOfDataDownload;
-@property (nonatomic,strong) NSTimer* timer;
+@property (nonatomic,strong) NSMutableDictionary* dictionaryOfCurrentDownload;
+
 @property (nonatomic,strong) DownloadManager* downloadManager;
 @property (nonatomic,strong) GoogleSearchPDF* searchPDFmanager;
-@property (nonatomic,assign) BOOL somethingChange;
+
 @property (nonatomic,strong) UIWebView* webView;
+@property (strong, nonatomic) UISearchBar* searchBar;
+@property (strong, nonatomic) UITextField* searchField;
+
 @end
 
 @implementation ViewController
@@ -29,12 +33,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.arrayOfDataDownload = [NSMutableArray array];
-    self.downloadManager = [DownloadManager sharedManagerWithDelegate:self];
-    self.somethingChange = NO;
     
-    self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
-    [self.searchPDFmanager getTenPDFLinks];    
+
+    [self emptyTableView];
+    [self initALL];
+    [self setupSearchBar];
 }
 
 - (void)didReceiveMemoryWarning
@@ -42,16 +45,94 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void) setSomethingChange:(BOOL)somethingChange
+- (void) emptyTableView
 {
-    if (_somethingChange == NO)
+    // For EmptyDataSet
+    // empty tableView
+    self.tableView.emptyDataSetSource = self;
+    self.tableView.emptyDataSetDelegate = self;
+    // A little trick for removing the cell separators
+    self.tableView.tableFooterView = [UIView new];
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
+}
+
+- (void) initALL
+{
+    self.downloadManager = [DownloadManager sharedManagerWithDelegate];
+    self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
+    
+    self.arrayOfDataDownload = [NSMutableArray array];
+    self.dictionaryOfCurrentDownload = [NSMutableDictionary dictionary];
+    
+    NSArray* dataDownloadsFromDatabase = [DataDownload getAllDataDownloadFromaDatabase];
+    [self.arrayOfDataDownload addObjectsFromArray:dataDownloadsFromDatabase];
+}
+
+- (void) setupSearchBar
+{
+    self.searchBar = [[UISearchBar alloc] init];
+    self.searchBar.placeholder = @"Type search request";
+    self.searchBar.delegate = self;
+    self.navigationItem.titleView = self.searchBar;
+    self.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.searchBar.spellCheckingType = UITextSpellCheckingTypeNo;
+    self.searchBar.keyboardType = UIKeyboardTypeWebSearch;
+    self.searchBar.enablesReturnKeyAutomatically = NO;
+    self.searchBar.returnKeyType = UIReturnKeySearch;
+    
+    UIView* view = [self.searchBar.subviews firstObject];
+    NSUInteger numViews = [view.subviews count];
+    for(int i = 0; i < numViews; i++)
     {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeToUpdate * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            _somethingChange = NO;
-        });
+        if([[view.subviews objectAtIndex:i] isKindOfClass:[UITextField class]])
+        {
+            self.searchField = [view.subviews objectAtIndex:i];
+        }
     }
-    _somethingChange = YES;
+    
+}
+
+
+#pragma mark - UISearchBarDelegate
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [self.searchPDFmanager getTenPDFLinksWithSearchString:self.searchBar.text];
+}
+
+#pragma mark - Actions
+- (IBAction)addMorePDFLinks:(UIBarButtonItem *)sender
+{
+    [self.searchPDFmanager getTenPDFLinksWithSearchString:self.searchBar.text];
+}
+
+#pragma mark - Help Methods
+
+- (void) reSetupCell: (DownloadCell*) cell
+{
+    cell.dataDownload.progress = (double)cell.dataDownload.isComplate;
+    
+    double percent = [self percentFromProgress:cell.dataDownload.progress];
+    cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
+    
+    cell.nameLabel.text = cell.dataDownload.name;
+    
+    cell.sizeProgressLabel.text = cell.dataDownload.downloaded;
+    
+    [cell.progressView setProgress:cell.dataDownload.progress animated:NO];
+    
+    cell.pauseImageView.hidden = !cell.dataDownload.isPause;
+}
+
+- (double) percentFromProgress: (double) progress
+{
+    return (((progress*100) < 0)||((progress*100) > 100)) ? 0.f: progress*100;
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self.searchBar resignFirstResponder];
 }
 
 #pragma mark - GotPDFLinksDelegate
@@ -60,8 +141,9 @@
 {
     for (NSString* urlString in links)
     {
-        DataDownload* download = [[DataDownload alloc]init];
+        DataDownload* download = [[DataDownload alloc] init];
         download.urlString = urlString;
+        
         [self.arrayOfDataDownload addObject:download];
     }
     
@@ -70,36 +152,34 @@
     });
 }
 
-
-#pragma mark - DownloadTasksDelegate
-
--(void) complateDownloadInURL:(NSURL *)url taskIdentifier:(NSUInteger)identifier
+-(void) errorWithSearchString:(NSString *)string
 {
-    for(DataDownload* download in self.arrayOfDataDownload)
-    {
-        if (download.identifier == identifier)
-        {
-            download.progress = 1.0f;
-            download.isComplate = YES;
-            self.somethingChange = YES;
-            [[NSFileManager defaultManager] moveItemAtURL:url toURL:download.localURL error:nil];
-            break;
-        }
-    }
+    [UIView animateWithDuration:0.3f animations:^{
+        self.searchField.backgroundColor = [UIColor redColor];
+    } completion:^(BOOL finished){
+        self.searchField.backgroundColor = nil;
+    }];
 }
 
--(void) progressDownload:(double)progress taskIdentifier:(NSUInteger)identifier
-{
-    for(DataDownload* download in self.arrayOfDataDownload)
-    {
-        if (download.identifier == identifier)
-        {
-            download.progress = progress;
-            self.somethingChange = YES;
-            break;
-        }
-    }
-}
+//#pragma mark - DownloadTasksDelegate
+//
+//-(void) complateDownloadInURL:(NSURL *)url identifier:(int16_t)identifier
+//{
+//    DataDownload* dataDownload = [self.dictionaryOfCurrentDownload objectForKey:@(identifier)];
+//    dataDownload.progress = 1.0f;
+//    dataDownload.isComplate = YES;
+//    dataDownload.isDownloading = NO;
+//    NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
+//    [[NSFileManager defaultManager] moveItemAtURL:url toURL:localURL error:nil];
+//}
+//-(void) progressDownload: (double) progress
+//              identifier: (int16_t) identifier
+//         totalDownloaded: (NSString*) downloaded
+//{
+//    DataDownload* dataDownload = [self.dictionaryOfCurrentDownload objectForKey:@(identifier)];
+//    dataDownload.progress = progress;
+//    dataDownload.downloaded = downloaded;
+//}
 
 #pragma mark - UITableViewDataSource
 
@@ -115,50 +195,148 @@
     DownloadCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell)
     {
-        cell = [[DownloadCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+        cell = [[DownloadCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    DataDownload* download = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
-    cell.nameLabel.text = download.name;
     
-    double percent = (((download.progress*100) < 0)||((download.progress*100) > 100)) ? 0.f: download.progress*100;
-    cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
-    [cell.progressView setProgress:download.progress animated:YES];
+    cell.dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+    
+    [self reSetupCell:cell];
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50.f;
+    return 60.f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    DataDownload* download = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+    DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+    NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:download.localURL.resourceSpecifier])
+    if ([[NSFileManager defaultManager] fileExistsAtPath:localURL.resourceSpecifier])
     {
-        download.isComplate = YES;
-        download.progress = 1.f;
-        
         UIViewController* viewController = [[UIViewController alloc]init];
         
         [self.webView loadHTMLString: @"" baseURL: nil];
         self.webView = nil;
         viewController.view = self.webView = [[UIWebView alloc]init];
         
-        NSURLRequest* requests = [NSURLRequest requestWithURL:download.localURL];
+        NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
+        NSURLRequest* requests = [NSURLRequest requestWithURL:localURL];
         [self.webView loadRequest:requests];
         
         [self.navigationController pushViewController:viewController animated:YES];
-        self.somethingChange = YES;
+        dataDownload.isComplate = YES;
+        dataDownload.isDownloading = NO;
     }
-    else if (download.progress == 0.f)
+    else if (!dataDownload.isDownloading)
     {
-        download.identifier = [self.downloadManager downloadFromURL:download.urlString];
+//        (ProgressBlock) progressBlock
+//    complateBlock: (ComplateBlock)complateBlock
+//    errorBlock: (ErrorBlock) errorBlock
+        ProgressBlock progressBlock = ^(double progress,int identifier,NSString* totalString)
+        {
+            dataDownload.progress = progress;
+            dataDownload.downloaded = totalString;
+        };
+        ComplateBlock complateBlock = ^(int identifier, NSURL* url)
+        {
+            dataDownload.progress = 1.0f;
+            dataDownload.isComplate = YES;
+            dataDownload.isDownloading = NO;
+            NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
+            [[NSFileManager defaultManager] moveItemAtURL:url toURL:localURL error:nil];
+        };
+        ErrorBlock errorBlock = ^(NSError* error)
+        {
+            // handler error
+        };
+ 
+        //dataDownload.downloadTask = [self.downloadManager downloadWithURL:dataDownload.urlString];
+        dataDownload.downloadTask = [self.downloadManager downloadWithURL:dataDownload.urlString
+                                                             dataDownload:dataDownload
+                                                         progressDownload:progressBlock
+                                                            complateBlock:complateBlock
+                                                               errorBlock:errorBlock];
+                                     
+        dataDownload.identifier = (int16_t)dataDownload.downloadTask.taskIdentifier;
+        dataDownload.isDownloading = YES;
+        [self.dictionaryOfCurrentDownload setObject:dataDownload forKey:@(dataDownload.identifier)];
     }
+    else if (dataDownload.isDownloading)
+    {
+        if (dataDownload.downloadTask.state == NSURLSessionTaskStateRunning)
+        {
+            [dataDownload.downloadTask suspend];
+            dataDownload.isPause = YES;
+        }
+        else if (dataDownload.downloadTask.state == NSURLSessionTaskStateSuspended)
+        {
+            [dataDownload.downloadTask resume];
+            dataDownload.isPause = NO;
+        }
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        DownloadCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [cell removeAllObserver];
+        
+        DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+        [self.arrayOfDataDownload removeObject:dataDownload];
+        [dataDownload removeFromDatabase];
+        [dataDownload.downloadTask cancel];
+        
+        dataDownload = nil;
+        
+        [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+    }
+}
+#pragma mark - DZNEmptyDataSetSource & DZNEmptyDataSetDelegate
+
+- (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
+{
+    return [UIImage imageNamed:@"emptyPlaceholder.png"];
+}
+
+//The attributed string for the title of the empty state
+- (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView
+{
+    NSString *text = @"Please trying search something";
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0f],
+                                 NSForegroundColorAttributeName: [UIColor darkGrayColor]};
+    
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
+}
+
+//The attributed string for the description of the empty state
+- (NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView
+{
+    NSString *text = @"Program trying search this in Google like pdf and u can download it and watch.";
+    
+    NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
+    paragraph.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraph.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
+                                 NSForegroundColorAttributeName: [UIColor lightGrayColor],
+                                 NSParagraphStyleAttributeName: paragraph};
+    
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
 
 @end

@@ -11,13 +11,15 @@
 @protocol GotPDFLinksDelegate <NSObject>
 
 - (void) givePDFLink: (NSArray <NSString*> *) link;
+- (void) errorWithSearchString: (NSString*) string;
 
 @end
 
 @interface GoogleSearchPDF : NSObject
 
 @property (nonatomic,weak) id <GotPDFLinksDelegate> delegate;
+
 +(GoogleSearchPDF*) sharedManagerWithDelegate: (id <GotPDFLinksDelegate>) delegate;
 
-- (void) getTenPDFLinks;
+- (void) getTenPDFLinksWithSearchString: (NSString*) searchString;
 @end

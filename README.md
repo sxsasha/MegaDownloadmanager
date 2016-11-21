@@ -1,1 +1,2 @@
-Download manager for pdf files (from google search) and show him in webView
+# MegaDownloadmanager
+download and watch pdf files from google search "ios" filetype:pdf
