@@ -34,7 +34,6 @@
 {
     [super viewDidLoad];
     
-
     [self emptyTableView];
     [self initALL];
     [self setupSearchBar];
@@ -313,7 +312,7 @@
 
 #pragma mark - UIWebViewDelegate
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
+- (BOOL)webView:(UIWebView* )webView shouldStartLoadWithRequest:(NSURLRequest* )request
  navigationType:(UIWebViewNavigationType)navigationType
 {
     BOOL isExternalResource = [request.URL.scheme rangeOfString:@"http"].location != NSNotFound;
@@ -332,38 +331,38 @@
 }
 #pragma mark - DZNEmptyDataSetSource & DZNEmptyDataSetDelegate
 
-- (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
+- (UIImage* )imageForEmptyDataSet:(UIScrollView* )scrollView
 {
     return [UIImage imageNamed:@"emptyPlaceholder.png"];
 }
 
 //The attributed string for the title of the empty state
-- (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView
+- (NSAttributedString* )titleForEmptyDataSet:(UIScrollView* )scrollView
 {
-    NSString *text = @"Please trying search something";
+    NSString* text = @"Please trying search something";
     
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0f],
+    NSDictionary* attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0f],
                                  NSForegroundColorAttributeName: [UIColor darkGrayColor]};
     
     return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
 
 //The attributed string for the description of the empty state
-- (NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView
+- (NSAttributedString* )descriptionForEmptyDataSet:(UIScrollView *)scrollView
 {
-    NSString *text = @"Program trying search this in Google like pdf and u can download it and watch.";
+    NSString* text = @"Program trying search this in Google like pdf and u can download it and watch.";
     
-    NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
+    NSMutableParagraphStyle* paragraph = [NSMutableParagraphStyle new];
     paragraph.lineBreakMode = NSLineBreakByWordWrapping;
     paragraph.alignment = NSTextAlignmentCenter;
     
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
+    NSDictionary* attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
                                  NSForegroundColorAttributeName: [UIColor lightGrayColor],
                                  NSParagraphStyleAttributeName: paragraph};
     
     return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
--(void)emptyDataSet:(UIScrollView *)scrollView didTapView:(UIView *)view
+-(void)emptyDataSet:(UIScrollView* )scrollView didTapView:(UIView* )view
 {
     [self.searchBar resignFirstResponder];
 }
