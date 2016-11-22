@@ -67,7 +67,7 @@
     [self.arrayOfDataDownload addObjectsFromArray:dataDownloadsFromDatabase];
     
     // check if we have internet connections with Reachability
-    self.reach = [Reachability reachabilityWithHostname:@"http://www.google.com"];
+    self.reach = [Reachability reachabilityWithHostname:@"https://www.apple.com"];
 }
 
 - (void) setupSearchBar
@@ -92,7 +92,7 @@
             self.searchField = [view.subviews objectAtIndex:i];
         }
     }
-    
+
 }
 
 
@@ -123,6 +123,9 @@
         [UIAlertController alertControllerWithTitle:@"No Internet Connection"
                                             message:@"Your device has no internet connection now"
                                      preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                         handler:nil];
+        [alertController addAction:okAction];
          
         [self presentViewController:alertController animated:YES completion:nil];
     }
@@ -360,5 +363,10 @@
     
     return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
+-(void)emptyDataSet:(UIScrollView *)scrollView didTapView:(UIView *)view
+{
+    [self.searchBar resignFirstResponder];
+}
+
 
 @end

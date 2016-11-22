@@ -116,7 +116,7 @@ didCompleteWithError:(nullable NSError *)error
     
     if (i >= [array count])
     {
-        i = [array count] - 1;
+        i = (int)[array count] - 1;
     }
     return [NSString stringWithFormat:@"%lld%@",((long long  int)xBytes),[array objectAtIndex:i] ];
 }
