@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		84235C861DDC4CEF00337939 /* SearchHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84235C831DDC4CEF00337939 /* SearchHistory.m */; };
 		84235C871DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84235C851DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m */; };
+		84262E3F1DE4322400B968DE /* TaskWithBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 84262E3E1DE4322400B968DE /* TaskWithBlocks.m */; };
+		84262E481DE4593300B968DE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84262E471DE4593300B968DE /* SystemConfiguration.framework */; };
+		84262E4C1DE459F200B968DE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 84262E4B1DE459F200B968DE /* Reachability.m */; };
 		8436F53F1DDB78B500BB65C4 /* DataDownloadCoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = 8436F53C1DDB78B500BB65C4 /* DataDownloadCoreData.m */; };
 		8436F5401DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 8436F53E1DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m */; };
 		843FF8AF1DDAF854008B8B27 /* DataDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 843FF8AE1DDAF854008B8B27 /* DataDownload.m */; };
@@ -34,6 +37,11 @@
 		84235C831DDC4CEF00337939 /* SearchHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchHistory.m; sourceTree = "<group>"; };
 		84235C841DDC4CEF00337939 /* SearchHistory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SearchHistory+CoreDataProperties.h"; sourceTree = "<group>"; };
 		84235C851DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SearchHistory+CoreDataProperties.m"; sourceTree = "<group>"; };
+		84262E3D1DE4322400B968DE /* TaskWithBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskWithBlocks.h; sourceTree = "<group>"; };
+		84262E3E1DE4322400B968DE /* TaskWithBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskWithBlocks.m; sourceTree = "<group>"; };
+		84262E471DE4593300B968DE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		84262E4A1DE459F200B968DE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		84262E4B1DE459F200B968DE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		8436F53B1DDB78B500BB65C4 /* DataDownloadCoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataDownloadCoreData.h; sourceTree = "<group>"; };
 		8436F53C1DDB78B500BB65C4 /* DataDownloadCoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataDownloadCoreData.m; sourceTree = "<group>"; };
 		8436F53D1DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DataDownloadCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -65,7 +73,6 @@
 		84B855601DD06B0B00F2E5D3 /* GoogleSearchPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GoogleSearchPDF.h; path = ../GoogleSearchPDF.h; sourceTree = "<group>"; };
 		84B855611DD06B0B00F2E5D3 /* GoogleSearchPDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GoogleSearchPDF.m; path = ../GoogleSearchPDF.m; sourceTree = "<group>"; };
 		84F47E4A1DE2FA6A0081064E /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
-		84F47E4C1DE33E4B0081064E /* DownloadTaskBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DownloadTaskBlock.h; path = ../DownloadTaskBlock.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,18 +80,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84262E481DE4593300B968DE /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		84262E461DE4593300B968DE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				84262E471DE4593300B968DE /* SystemConfiguration.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		84262E491DE459DA00B968DE /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				84262E4A1DE459F200B968DE /* Reachability.h */,
+				84262E4B1DE459F200B968DE /* Reachability.m */,
+				847A5B181DDC8A9500A4063E /* UIScrollView+EmptyDataSet.h */,
+				847A5B191DDC8A9500A4063E /* UIScrollView+EmptyDataSet.m */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
 		84721E041DCC6F2E00014F87 = {
 			isa = PBXGroup;
 			children = (
 				84721E0F1DCC6F2E00014F87 /* MegaDownloadManager */,
 				84721E0E1DCC6F2E00014F87 /* Products */,
 				84AD60851DD9D87900D8C912 /* MegaDownloadManager-Bridging-Header.h */,
+				84262E461DE4593300B968DE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,6 +127,7 @@
 		84721E0F1DCC6F2E00014F87 /* MegaDownloadManager */ = {
 			isa = PBXGroup;
 			children = (
+				84262E491DE459DA00B968DE /* libs */,
 				84AD60801DD9D69200D8C912 /* CoreData & Model */,
 				84B855631DD0818600F2E5D3 /* Managers */,
 				84721E391DCCBBAC00014F87 /* Controller */,
@@ -106,9 +135,6 @@
 				84721E331DCCB6DB00014F87 /* DownloadCell.m */,
 				84721E131DCC6F2E00014F87 /* AppDelegate.h */,
 				84721E141DCC6F2E00014F87 /* AppDelegate.m */,
-				84F47E4C1DE33E4B0081064E /* DownloadTaskBlock.h */,
-				847A5B181DDC8A9500A4063E /* UIScrollView+EmptyDataSet.h */,
-				847A5B191DDC8A9500A4063E /* UIScrollView+EmptyDataSet.m */,
 				84721E191DCC6F2E00014F87 /* Main.storyboard */,
 				84721E1C1DCC6F2E00014F87 /* Assets.xcassets */,
 				84721E1E1DCC6F2E00014F87 /* LaunchScreen.storyboard */,
@@ -153,6 +179,8 @@
 				8436F53E1DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m */,
 				843FF8AD1DDAF854008B8B27 /* DataDownload.h */,
 				843FF8AE1DDAF854008B8B27 /* DataDownload.m */,
+				84262E3D1DE4322400B968DE /* TaskWithBlocks.h */,
+				84262E3E1DE4322400B968DE /* TaskWithBlocks.m */,
 			);
 			name = "CoreData & Model";
 			path = ..;
@@ -202,6 +230,7 @@
 				TargetAttributes = {
 					84721E0C1DCC6F2E00014F87 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = LE3554D3R2;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -256,10 +285,12 @@
 				84AD607F1DD9D68A00D8C912 /* Model.xcdatamodeld in Sources */,
 				84B855621DD06B0B00F2E5D3 /* GoogleSearchPDF.m in Sources */,
 				8436F53F1DDB78B500BB65C4 /* DataDownloadCoreData.m in Sources */,
+				84262E4C1DE459F200B968DE /* Reachability.m in Sources */,
 				84721E291DCC70FD00014F87 /* DownloadManager.m in Sources */,
 				8436F5401DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m in Sources */,
 				84235C871DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m in Sources */,
 				84721E341DCCB6DB00014F87 /* DownloadCell.m in Sources */,
+				84262E3F1DE4322400B968DE /* TaskWithBlocks.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,7 +411,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = LE3554D3R2;
 				INFOPLIST_FILE = MegaDownloadManager/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = softgroup.MegaDownloadManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -395,7 +428,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = LE3554D3R2;
 				INFOPLIST_FILE = MegaDownloadManager/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = softgroup.MegaDownloadManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";

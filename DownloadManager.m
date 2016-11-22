@@ -11,10 +11,9 @@
 #define maxConcurentDownload 10
 
 
-
 @implementation DownloadManager
 
-+(DownloadManager*) sharedManagerWithDelegate;//: (id <DownloadTasksDelegate>) delegate
++(DownloadManager*) sharedManager;
 {
     static DownloadManager* manager = nil;
     static dispatch_once_t onceToken;
@@ -26,6 +25,10 @@
         ourQueue.maxConcurrentOperationCount = maxConcurentDownload;
         
         NSURLSessionConfiguration* sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+        sessionConfig.timeoutIntervalForRequest = 0;
+        sessionConfig.timeoutIntervalForResource = 0;
+        sessionConfig.allowsCellularAccess = YES;
+        
         manager.defaultSession = [NSURLSession sessionWithConfiguration:sessionConfig
                                                                delegate:manager
                                                           delegateQueue:ourQueue];
@@ -36,7 +39,6 @@
 }
 
 -(NSURLSessionDownloadTask*) downloadWithURL: (NSString*) urlString
-                                dataDownload: (DataDownload*) dataDownload
                             progressDownload: (ProgressBlock) progressBlock
                                complateBlock: (ComplateBlock)complateBlock
                                   errorBlock: (ErrorBlock) errorBlock
@@ -44,11 +46,10 @@
     NSURL* url = [NSURL URLWithString:urlString];
     if (url)
     {
-        NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.f];
+        NSURLRequest* request = [NSURLRequest requestWithURL:url];
         NSURLSessionDownloadTask* sessionTask = [self.defaultSession downloadTaskWithRequest:request];
         
-        DownloadTaskBlock* downloadTaskBlock = [[DownloadTaskBlock alloc] init];
-        downloadTaskBlock.dataDownload = dataDownload;
+        TaskWithBlocks* downloadTaskBlock = [[TaskWithBlocks alloc]init];
         downloadTaskBlock.progressBlock = progressBlock;
         downloadTaskBlock.complateBlock = complateBlock;
         downloadTaskBlock.errorBlock = errorBlock;
@@ -75,21 +76,29 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     NSString* expectedSize = [self getReadableFormat:totalBytesExpectedToWrite];
     NSString* size = [NSString stringWithFormat:@"%@/%@",downloaded,expectedSize];
     
-    DownloadTaskBlock* downloadTaskBlock = self.dictOfDownloadTask[@(downloadTask.taskIdentifier)];
+    TaskWithBlocks* downloadTaskBlock = self.dictOfDownloadTask[@(downloadTask.taskIdentifier)];
     downloadTaskBlock.progressBlock(progress,(int)downloadTask.taskIdentifier,size);
-//    [self.delegate progressDownload:progress
-//                         identifier:downloadTask.taskIdentifier
-//                    totalDownloaded:size];
 }
 
 - (void)URLSession:(NSURLSession *)session
       downloadTask:(NSURLSessionDownloadTask *)downloadTask
 didFinishDownloadingToURL:(NSURL *)location
 {
-    DownloadTaskBlock* downloadTaskBlock = self.dictOfDownloadTask[@(downloadTask.taskIdentifier)];
+   TaskWithBlocks* downloadTaskBlock = self.dictOfDownloadTask[@(downloadTask.taskIdentifier)];
     downloadTaskBlock.complateBlock((int)downloadTask.taskIdentifier,location);
-  //  [self.delegate complateDownloadInURL:location
-    //                           identifier:(int16_t)downloadTask.taskIdentifier];
+}
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didCompleteWithError:(nullable NSError *)error
+{
+    TaskWithBlocks* downloadTaskBlock = self.dictOfDownloadTask[@(task.taskIdentifier)];
+    if (error)
+    {
+        downloadTaskBlock.errorBlock(error);
+    }
+    
+    [self.dictOfDownloadTask removeObjectForKey:@(task.taskIdentifier)];
 }
 
 #pragma mark - Help methods

@@ -30,6 +30,14 @@
     {
         self.coreDataManager = [CoreDataManager sharedManager];
         self.dataDownloadCoreData = dataDownload;
+        self.name = dataDownload.name;
+        self.urlString = dataDownload.urlString;
+        
+        if ([self checkIfWeHaveSomeFile:self.name])
+        {
+            self.isComplate = YES;
+            self.progress = 1.f;
+        }
     }
     return self;
 }
@@ -42,23 +50,31 @@
 #pragma mark - Setters & Getters
 - (void) setUrlString:(NSString *)urlString
 {
-    //gen name, replace space with _
-    NSString* name = [[urlString lastPathComponent] stringByRemovingPercentEncoding];
-    
-    NSRange extension = NSMakeRange([name length] - 3, 3);
-    if (![[name substringWithRange:extension] isEqualToString:@"pdf"])
+    NSURL* documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    if (!_name)
     {
-        name = [name stringByAppendingString:@".pdf"];
+        //gen name, replace space with _
+        NSString* name = [[urlString lastPathComponent] stringByRemovingPercentEncoding];
+        
+        NSRange extension = NSMakeRange([name length] - 4, 4);
+        if (![[name substringWithRange:extension] isEqualToString:@".pdf"])
+        {
+            name = [name stringByAppendingString:@".pdf"];
+        }
+        
+        NSArray* isHaveSpace = [name componentsSeparatedByString:@" "];
+        self.name = [isHaveSpace componentsJoinedByString:@"_"];
+
+        if ([self checkIfWeHaveSomeFile:self.name])
+        {
+            NSRange addSomeRange = NSMakeRange([self.name length] - 4, 0);
+            self.name = [self.name stringByReplacingCharactersInRange:addSomeRange withString:@"A"];
+        }
     }
     
-    NSArray* isHaveSpace = [name componentsSeparatedByString:@" "];
-    self.name = [isHaveSpace componentsJoinedByString:@"_"];
-
     //create localURL (where save)
-    NSURL* documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                                  inDomains:NSUserDomainMask] lastObject];
     self.localURL = [documentsURL URLByAppendingPathComponent:self.name].absoluteString;
-
+    
     _urlString = urlString;
     self.dataDownloadCoreData.urlString = urlString;
     
@@ -68,12 +84,6 @@
 - (void) setIsComplate:(BOOL)isComplate
 {
     _isComplate = isComplate;
-    
-    if ((isComplate)&&(![self.dataDownloadCoreData.isComplate boolValue]))
-    {
-        self.dataDownloadCoreData.isComplate = @(_isComplate);
-        [self.coreDataManager save:nil];
-    }
 }
 
 - (void) setName:(NSString *)name
@@ -85,7 +95,6 @@
 - (void) setLocalURL:(NSString *)localURL
 {
     _localURL =localURL;
-    self.dataDownloadCoreData.localURL = localURL;
 }
 
 #pragma mark - Help Methods
@@ -98,9 +107,6 @@
     for (DataDownloadCoreData* obj in dataDownloadsFromDatabase)
     {
         DataDownload* dataDownload = [[DataDownload alloc] initWithDataDownload:obj];
-        dataDownload.urlString = obj.urlString;
-        dataDownload.isComplate = [obj.isComplate boolValue];
-
         [array addObject:dataDownload];
     }
     return array;
@@ -116,4 +122,19 @@
     [self.coreDataManager save:nil];
 }
 
+- (BOOL) checkIfWeHaveSomeFile: (NSString*) name
+{
+    NSURL* documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    
+    NSString* localURL = [documentsURL URLByAppendingPathComponent:name].resourceSpecifier;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:localURL])
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
 @end

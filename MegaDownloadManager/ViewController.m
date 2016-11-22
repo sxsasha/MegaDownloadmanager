@@ -11,13 +11,13 @@
 #import "DownloadManager.h"
 #import "DownloadCell.h"
 #import "GoogleSearchPDF.h"
+#import "Reachability.h"
 
-//#define timeToUpdate 0.04  //25 framerate
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate,UISearchBarDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate,UISearchBarDelegate, UIWebViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 
 @property (nonatomic,strong) NSMutableArray* arrayOfDataDownload;
-@property (nonatomic,strong) NSMutableDictionary* dictionaryOfCurrentDownload;
+@property (nonatomic,strong) Reachability* reach;
 
 @property (nonatomic,strong) DownloadManager* downloadManager;
 @property (nonatomic,strong) GoogleSearchPDF* searchPDFmanager;
@@ -58,14 +58,16 @@
 
 - (void) initALL
 {
-    self.downloadManager = [DownloadManager sharedManagerWithDelegate];
+    self.downloadManager = [DownloadManager sharedManager];
     self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
     
     self.arrayOfDataDownload = [NSMutableArray array];
-    self.dictionaryOfCurrentDownload = [NSMutableDictionary dictionary];
     
     NSArray* dataDownloadsFromDatabase = [DataDownload getAllDataDownloadFromaDatabase];
     [self.arrayOfDataDownload addObjectsFromArray:dataDownloadsFromDatabase];
+    
+    // check if we have internet connections with Reachability
+    self.reach = [Reachability reachabilityWithHostname:@"http://www.google.com"];
 }
 
 - (void) setupSearchBar
@@ -97,20 +99,38 @@
 #pragma mark - UISearchBarDelegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    [self.searchPDFmanager getTenPDFLinksWithSearchString:self.searchBar.text];
+    [self  addMorePDFLinks];
 }
 
 #pragma mark - Actions
 - (IBAction)addMorePDFLinks:(UIBarButtonItem *)sender
 {
-    [self.searchPDFmanager getTenPDFLinksWithSearchString:self.searchBar.text];
+     [self  addMorePDFLinks];
 }
 
 #pragma mark - Help Methods
 
+- (void) addMorePDFLinks
+{
+    if (self.reach.isReachable)
+    {
+        [self.searchPDFmanager getTenPDFLinksWithSearchString:self.searchBar.text];
+    }
+    else
+    {
+        [self errorWithSearchString:nil];
+        UIAlertController* alertController =
+        [UIAlertController alertControllerWithTitle:@"No Internet Connection"
+                                            message:@"Your device has no internet connection now"
+                                     preferredStyle:UIAlertControllerStyleAlert];
+         
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
 - (void) reSetupCell: (DownloadCell*) cell
 {
-    cell.dataDownload.progress = (double)cell.dataDownload.isComplate;
+    cell.dataDownload.progress = cell.dataDownload.progress;
     
     double percent = [self percentFromProgress:cell.dataDownload.progress];
     cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
@@ -141,10 +161,17 @@
 {
     for (NSString* urlString in links)
     {
-        DataDownload* download = [[DataDownload alloc] init];
-        download.urlString = urlString;
-        
-        [self.arrayOfDataDownload addObject:download];
+        BOOL isHaveSomeURL = NO;
+        for (DataDownload* dataDownload in self.arrayOfDataDownload)
+        {
+            isHaveSomeURL = isHaveSomeURL || [dataDownload.urlString isEqualToString:urlString];
+        }
+        if (!isHaveSomeURL)
+        {
+            DataDownload* download = [[DataDownload alloc] init];
+            download.urlString = urlString;
+            [self.arrayOfDataDownload addObject:download];
+        }
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -160,26 +187,6 @@
         self.searchField.backgroundColor = nil;
     }];
 }
-
-//#pragma mark - DownloadTasksDelegate
-//
-//-(void) complateDownloadInURL:(NSURL *)url identifier:(int16_t)identifier
-//{
-//    DataDownload* dataDownload = [self.dictionaryOfCurrentDownload objectForKey:@(identifier)];
-//    dataDownload.progress = 1.0f;
-//    dataDownload.isComplate = YES;
-//    dataDownload.isDownloading = NO;
-//    NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
-//    [[NSFileManager defaultManager] moveItemAtURL:url toURL:localURL error:nil];
-//}
-//-(void) progressDownload: (double) progress
-//              identifier: (int16_t) identifier
-//         totalDownloaded: (NSString*) downloaded
-//{
-//    DataDownload* dataDownload = [self.dictionaryOfCurrentDownload objectForKey:@(identifier)];
-//    dataDownload.progress = progress;
-//    dataDownload.downloaded = downloaded;
-//}
 
 #pragma mark - UITableViewDataSource
 
@@ -224,6 +231,7 @@
         [self.webView loadHTMLString: @"" baseURL: nil];
         self.webView = nil;
         viewController.view = self.webView = [[UIWebView alloc]init];
+        self.webView.delegate = self;
         
         NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
         NSURLRequest* requests = [NSURLRequest requestWithURL:localURL];
@@ -235,9 +243,6 @@
     }
     else if (!dataDownload.isDownloading)
     {
-//        (ProgressBlock) progressBlock
-//    complateBlock: (ComplateBlock)complateBlock
-//    errorBlock: (ErrorBlock) errorBlock
         ProgressBlock progressBlock = ^(double progress,int identifier,NSString* totalString)
         {
             dataDownload.progress = progress;
@@ -253,19 +258,16 @@
         };
         ErrorBlock errorBlock = ^(NSError* error)
         {
-            // handler error
+            dataDownload.downloaded = error.localizedFailureReason;
         };
  
-        //dataDownload.downloadTask = [self.downloadManager downloadWithURL:dataDownload.urlString];
         dataDownload.downloadTask = [self.downloadManager downloadWithURL:dataDownload.urlString
-                                                             dataDownload:dataDownload
                                                          progressDownload:progressBlock
                                                             complateBlock:complateBlock
                                                                errorBlock:errorBlock];
                                      
         dataDownload.identifier = (int16_t)dataDownload.downloadTask.taskIdentifier;
         dataDownload.isDownloading = YES;
-        [self.dictionaryOfCurrentDownload setObject:dataDownload forKey:@(dataDownload.identifier)];
     }
     else if (dataDownload.isDownloading)
     {
@@ -304,6 +306,26 @@
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView endUpdates];
     }
+}
+
+#pragma mark - UIWebViewDelegate
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
+ navigationType:(UIWebViewNavigationType)navigationType
+{
+    BOOL isExternalResource = [request.URL.scheme rangeOfString:@"http"].location != NSNotFound;
+       
+    if ((navigationType == UIWebViewNavigationTypeLinkClicked)&&isExternalResource)
+    {
+        return NO;
+    }
+    return YES;
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    NSString* html = @"<html><body><head><h1>Error with open File</h1></head></body></html>";
+    [webView loadHTMLString:html baseURL:nil];
 }
 #pragma mark - DZNEmptyDataSetSource & DZNEmptyDataSetDelegate
 

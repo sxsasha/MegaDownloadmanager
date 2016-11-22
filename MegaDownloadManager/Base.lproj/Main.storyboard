@@ -24,7 +24,7 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dB7-ce-1J3" id="c67-ii-rIe">
-                                    <frame key="frameInset" width="375" height="49"/>
+                                    <frame key="frameInset" width="375" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sL9-2b-k4Z">
@@ -47,12 +47,12 @@
                                         </label>
                                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pause.png" translatesAutoresizingMaskIntoConstraints="NO" id="sQL-43-lBR">
                                             <constraints>
-                                                <constraint firstAttribute="width" secondItem="sQL-43-lBR" secondAttribute="height" multiplier="1:1" id="xje-6E-BIq"/>
+                                                <constraint firstAttribute="width" secondItem="sQL-43-lBR" secondAttribute="height" multiplier="1:1" priority="996" id="xje-6E-BIq"/>
                                             </constraints>
                                         </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="sQL-43-lBR" firstAttribute="height" secondItem="c67-ii-rIe" secondAttribute="height" multiplier="0.6" id="1Tj-Jw-EXA"/>
+                                        <constraint firstItem="sQL-43-lBR" firstAttribute="height" secondItem="c67-ii-rIe" secondAttribute="height" multiplier="0.3" id="1Tj-Jw-EXA"/>
                                         <constraint firstItem="j1U-2M-wdp" firstAttribute="centerY" secondItem="c67-ii-rIe" secondAttribute="centerY" id="4f3-MC-m8n"/>
                                         <constraint firstItem="j1U-2M-wdp" firstAttribute="centerX" secondItem="sL9-2b-k4Z" secondAttribute="centerX" id="5V0-e0-jQc"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="d8Y-Zx-XW0" secondAttribute="trailing" constant="7" id="ADC-Z8-6Ml"/>
@@ -60,8 +60,9 @@
                                         <constraint firstItem="j1U-2M-wdp" firstAttribute="top" secondItem="sL9-2b-k4Z" secondAttribute="top" id="Isa-XT-49c"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="d8Y-Zx-XW0" secondAttribute="bottom" constant="-7" id="LP6-5h-e5F"/>
                                         <constraint firstAttribute="leadingMargin" secondItem="sQL-43-lBR" secondAttribute="leading" id="O7i-Xy-iMg"/>
+                                        <constraint firstItem="sQL-43-lBR" firstAttribute="height" secondItem="sL9-2b-k4Z" secondAttribute="height" priority="987" id="SDc-RE-yf1"/>
+                                        <constraint firstItem="sQL-43-lBR" firstAttribute="baseline" secondItem="sL9-2b-k4Z" secondAttribute="baseline" id="U7W-ls-zSO"/>
                                         <constraint firstItem="bL7-Gr-aWo" firstAttribute="centerX" secondItem="sL9-2b-k4Z" secondAttribute="centerX" id="UuG-fx-iYl"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="sQL-43-lBR" secondAttribute="bottom" id="V9f-pm-xo2"/>
                                         <constraint firstItem="sL9-2b-k4Z" firstAttribute="centerY" secondItem="c67-ii-rIe" secondAttribute="centerY" id="eoj-fi-nDr"/>
                                         <constraint firstItem="sL9-2b-k4Z" firstAttribute="width" secondItem="c67-ii-rIe" secondAttribute="width" id="kvm-H4-DGg"/>
                                         <constraint firstItem="bL7-Gr-aWo" firstAttribute="bottom" secondItem="sL9-2b-k4Z" secondAttribute="top" id="vFy-n1-CxZ"/>

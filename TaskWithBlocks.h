@@ -1,8 +1,8 @@
 //
-//  DownloadTaskBlock.h
+//  TaskWithBlocks.h
 //  MegaDownloadManager
 //
-//  Created by admin on 21.11.16.
+//  Created by admin on 22.11.16.
 //  Copyright © 2016 admin. All rights reserved.
 //
 
@@ -14,14 +14,12 @@ typedef void (^ErrorBlock)(NSError*);
 
 @class DataDownload;
 
-@interface DownloadTaskBlock : NSObject
-
+@interface TaskWithBlocks : NSObject
 
 @property (nonatomic, copy) ProgressBlock progressBlock;
 @property (nonatomic, copy) ComplateBlock complateBlock;
 @property (nonatomic, copy) ErrorBlock errorBlock;
 
-@property (nonatomic, strong) DataDownload* dataDownload;
 @property (nonatomic, weak) NSURLSessionDownloadTask* downloadTask;
 
 @end

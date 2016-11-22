@@ -9,31 +9,17 @@
 
 #import <Foundation/Foundation.h>
 #import "DataDownload.h"
-#import "DownloadTaskBlock.h"
-
-
-
-//@protocol DownloadTasksDelegate <NSObject>
-//
-//-(void) progressDownload: (double) progress
-//              identifier: (int16_t) identifier
-//         totalDownloaded: (NSString*) totalString;
-//-(void) complateDownloadInURL:(NSURL*) url identifier: (int16_t) identifier;
-//
-//@end
-
-
+#import "TaskWithBlocks.h"
 
 @interface DownloadManager : NSObject <NSURLSessionDownloadDelegate>
 
 @property (nonatomic,strong) NSURLSession* defaultSession;
 @property (nonatomic,strong) NSMutableDictionary* dictOfDownloadTask;
-//@property (nonatomic,weak) id <DownloadTasksDelegate> delegate;
 
-+(DownloadManager*) sharedManagerWithDelegate;//: (id <DownloadTasksDelegate>) delegate;
+
++(DownloadManager*) sharedManager;
 
 -(NSURLSessionDownloadTask*) downloadWithURL: (NSString*) urlString
-                                dataDownload: (DataDownload*) dataDownload
                             progressDownload: (ProgressBlock) progressBlock
                                complateBlock: (ComplateBlock)complateBlock
                                   errorBlock: (ErrorBlock) errorBlock;
