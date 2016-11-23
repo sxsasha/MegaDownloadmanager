@@ -34,12 +34,8 @@
 {
     [super viewDidLoad];
     
-//    NSURL* documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-//    
-//    NSLog(@"documentsURL: %@", documentsURL);
-    
     [self emptyTableView];
-    [self initALL];
+    [self initAll];
     [self setupSearchBar];
 }
 
@@ -58,7 +54,7 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
-- (void) initALL
+- (void) initAll
 {
     self.downloadManager = [DownloadManager sharedManager];
     self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];

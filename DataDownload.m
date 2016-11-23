@@ -100,11 +100,6 @@
     [self.coreDataManager save:nil];
 }
 
-- (void) setIsComplate:(BOOL)isComplate
-{
-    _isComplate = isComplate;
-}
-
 - (void) setName:(NSString *)name
 {
     _name = name;
@@ -115,11 +110,6 @@
 {
     _localName = localName;
     self.dataDownloadCoreData.localName = localName;
-}
-
-- (void) setLocalURL:(NSString *)localURL
-{
-    _localURL =localURL;
 }
 
 #pragma mark - Help Methods

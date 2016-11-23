@@ -14,13 +14,7 @@
 
 -(void) prepareForReuse
 {
-    if (self.observationInfo)
-    {
-        [self removeObserver:self forKeyPath:@"dataDownload.progress"];
-        [self removeObserver:self forKeyPath:@"dataDownload.downloaded"];
-        [self removeObserver:self forKeyPath:@"dataDownload.isComplate"];
-        [self removeObserver:self forKeyPath:@"dataDownload.isPause"];
-    }
+    [self removeAllObserver];
 }
 
 - (void) setDataDownload:(DataDownload *)dataDownload
@@ -33,19 +27,14 @@
     [self addObserver:self forKeyPath:@"dataDownload.isPause" options:NSKeyValueObservingOptionNew context:nil];
 }
 
-#pragma mark - remove observer than delete dataDownload
-- (void) removeAllObserver
+- (void)dealloc
 {
-    if (self.observationInfo)
-    {
-        [self removeObserver:self forKeyPath:@"dataDownload.progress"];
-        [self removeObserver:self forKeyPath:@"dataDownload.downloaded"];
-        [self removeObserver:self forKeyPath:@"dataDownload.isComplate"];
-        [self removeObserver:self forKeyPath:@"dataDownload.isPause"];
-    }
+    [self removeAllObserver];
 }
 
-- (void)dealloc
+
+#pragma mark - remove observer than delete dataDownload
+- (void) removeAllObserver
 {
     if (self.observationInfo)
     {
@@ -85,7 +74,7 @@
         {
             dispatch_async(dispatch_get_main_queue(), ^
                            {
-                               self.sizeProgressLabel.text = [change objectForKey:NSKeyValueChangeNewKey];
+                               self.sizeProgressLabel.text = text;
                            });
         }
     }

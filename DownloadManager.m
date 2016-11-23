@@ -32,7 +32,6 @@
         manager.defaultSession = [NSURLSession sessionWithConfiguration:sessionConfig
                                                                delegate:manager
                                                           delegateQueue:ourQueue];
-        //manager.delegate = delegate;
     });
     
     return manager;
