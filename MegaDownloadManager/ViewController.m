@@ -191,6 +191,8 @@
         [self.arrayOfDataDownload insertObjects:array atIndexes:indexSet];
         [self.tableView insertRowsAtIndexPaths:arrayOfIndexs withRowAnimation:UITableViewRowAnimationTop];
         [self.tableView reloadData];
+        
+        [[CoreDataManager sharedManager] save:nil];
     });
 }
 

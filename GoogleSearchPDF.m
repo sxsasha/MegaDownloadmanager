@@ -114,7 +114,6 @@
         [array addObject:dictionary[@"link"]];
     }
     [self.delegate givePDFLink:array];
-    [self.coreDataManager save:nil];
 }
 
 #pragma mark - Help Methods

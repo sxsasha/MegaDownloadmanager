@@ -97,7 +97,6 @@
     _urlString = urlString;
     self.dataDownloadCoreData.urlString = urlString;
     
-    [self.coreDataManager save:nil];
 }
 
 - (void) setName:(NSString *)name
