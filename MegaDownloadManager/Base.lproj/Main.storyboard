@@ -3,13 +3,9 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
-<<<<<<< HEAD
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-=======
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
->>>>>>> Beta
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -18,28 +14,17 @@
             <objects>
                 <tableViewController id="TGV-7B-q4m" customClass="ViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Itq-Ul-qPY">
-<<<<<<< HEAD
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
-=======
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
->>>>>>> Beta
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="separatorColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <color key="sectionIndexBackgroundColor" red="0.94874493955090522" green="1" blue="0.57125960198602943" alpha="0.0" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" alpha="0.94999999999999996" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="pdf" rowHeight="50" id="dB7-ce-1J3" customClass="DownloadCell">
-<<<<<<< HEAD
-                                <rect key="frame" x="0.0" y="92" width="1024" height="50"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dB7-ce-1J3" id="c67-ii-rIe">
-                                    <frame key="frameInset" width="1024" height="49"/>
-=======
                                 <rect key="frame" x="0.0" y="92" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dB7-ce-1J3" id="c67-ii-rIe">
                                     <frame key="frameInset" width="375" height="50"/>
->>>>>>> Beta
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sL9-2b-k4Z">
@@ -60,14 +45,11 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-<<<<<<< HEAD
-=======
                                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pause.png" translatesAutoresizingMaskIntoConstraints="NO" id="sQL-43-lBR">
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="sQL-43-lBR" secondAttribute="height" multiplier="1:1" priority="996" id="xje-6E-BIq"/>
                                             </constraints>
                                         </imageView>
->>>>>>> Beta
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="sQL-43-lBR" firstAttribute="height" secondItem="c67-ii-rIe" secondAttribute="height" multiplier="0.3" id="1Tj-Jw-EXA"/>
@@ -77,12 +59,9 @@
                                         <constraint firstItem="sL9-2b-k4Z" firstAttribute="leading" secondItem="c67-ii-rIe" secondAttribute="leading" id="GRs-Pf-oty"/>
                                         <constraint firstItem="j1U-2M-wdp" firstAttribute="top" secondItem="sL9-2b-k4Z" secondAttribute="top" id="Isa-XT-49c"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="d8Y-Zx-XW0" secondAttribute="bottom" constant="-7" id="LP6-5h-e5F"/>
-<<<<<<< HEAD
-=======
                                         <constraint firstAttribute="leadingMargin" secondItem="sQL-43-lBR" secondAttribute="leading" id="O7i-Xy-iMg"/>
                                         <constraint firstItem="sQL-43-lBR" firstAttribute="height" secondItem="sL9-2b-k4Z" secondAttribute="height" priority="987" id="SDc-RE-yf1"/>
                                         <constraint firstItem="sQL-43-lBR" firstAttribute="baseline" secondItem="sL9-2b-k4Z" secondAttribute="baseline" id="U7W-ls-zSO"/>
->>>>>>> Beta
                                         <constraint firstItem="bL7-Gr-aWo" firstAttribute="centerX" secondItem="sL9-2b-k4Z" secondAttribute="centerX" id="UuG-fx-iYl"/>
                                         <constraint firstItem="sL9-2b-k4Z" firstAttribute="centerY" secondItem="c67-ii-rIe" secondAttribute="centerY" id="eoj-fi-nDr"/>
                                         <constraint firstItem="sL9-2b-k4Z" firstAttribute="width" secondItem="c67-ii-rIe" secondAttribute="width" id="kvm-H4-DGg"/>

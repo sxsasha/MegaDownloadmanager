@@ -11,9 +11,6 @@
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
-<<<<<<< HEAD
-	<dict/>
-=======
 	<dict>
 		<key>5BDFE3524611851EB0D46C4124078843</key>
 		<dict>
@@ -21,6 +18,5 @@
 			<true/>
 		</dict>
 	</dict>
->>>>>>> Beta
 </dict>
 </plist>

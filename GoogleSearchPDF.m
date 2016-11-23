@@ -86,13 +86,6 @@
         [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
           {
               NSError* errorWithDeSerialization;
-<<<<<<< HEAD
-              NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorWithDeSerialization];
-              
-              if ((!errorWithDeSerialization)&&(dictionary))
-              {
-                  [self parseDict:dictionary];
-=======
               if (data)
               {
                   NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorWithDeSerialization];
@@ -101,7 +94,6 @@
                   {
                       [self parseDict:dictionary];
                   }
->>>>>>> Beta
               }
           }] resume];
     }

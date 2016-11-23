@@ -9,12 +9,9 @@
 /* Begin PBXBuildFile section */
 		84235C861DDC4CEF00337939 /* SearchHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84235C831DDC4CEF00337939 /* SearchHistory.m */; };
 		84235C871DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84235C851DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m */; };
-<<<<<<< HEAD
-=======
 		84262E3F1DE4322400B968DE /* TaskWithBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 84262E3E1DE4322400B968DE /* TaskWithBlocks.m */; };
 		84262E481DE4593300B968DE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84262E471DE4593300B968DE /* SystemConfiguration.framework */; };
 		84262E4C1DE459F200B968DE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 84262E4B1DE459F200B968DE /* Reachability.m */; };
->>>>>>> Beta
 		8436F53F1DDB78B500BB65C4 /* DataDownloadCoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = 8436F53C1DDB78B500BB65C4 /* DataDownloadCoreData.m */; };
 		8436F5401DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 8436F53E1DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m */; };
 		843FF8AF1DDAF854008B8B27 /* DataDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 843FF8AE1DDAF854008B8B27 /* DataDownload.m */; };
@@ -40,14 +37,11 @@
 		84235C831DDC4CEF00337939 /* SearchHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchHistory.m; sourceTree = "<group>"; };
 		84235C841DDC4CEF00337939 /* SearchHistory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SearchHistory+CoreDataProperties.h"; sourceTree = "<group>"; };
 		84235C851DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SearchHistory+CoreDataProperties.m"; sourceTree = "<group>"; };
-<<<<<<< HEAD
-=======
 		84262E3D1DE4322400B968DE /* TaskWithBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskWithBlocks.h; sourceTree = "<group>"; };
 		84262E3E1DE4322400B968DE /* TaskWithBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskWithBlocks.m; sourceTree = "<group>"; };
 		84262E471DE4593300B968DE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		84262E4A1DE459F200B968DE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		84262E4B1DE459F200B968DE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
->>>>>>> Beta
 		8436F53B1DDB78B500BB65C4 /* DataDownloadCoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataDownloadCoreData.h; sourceTree = "<group>"; };
 		8436F53C1DDB78B500BB65C4 /* DataDownloadCoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataDownloadCoreData.m; sourceTree = "<group>"; };
 		8436F53D1DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DataDownloadCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -118,10 +112,7 @@
 				84721E0F1DCC6F2E00014F87 /* MegaDownloadManager */,
 				84721E0E1DCC6F2E00014F87 /* Products */,
 				84AD60851DD9D87900D8C912 /* MegaDownloadManager-Bridging-Header.h */,
-<<<<<<< HEAD
-=======
 				84262E461DE4593300B968DE /* Frameworks */,
->>>>>>> Beta
 			);
 			sourceTree = "<group>";
 		};
@@ -136,10 +127,7 @@
 		84721E0F1DCC6F2E00014F87 /* MegaDownloadManager */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
-=======
 				84262E491DE459DA00B968DE /* libs */,
->>>>>>> Beta
 				84AD60801DD9D69200D8C912 /* CoreData & Model */,
 				84B855631DD0818600F2E5D3 /* Managers */,
 				84721E391DCCBBAC00014F87 /* Controller */,
@@ -147,8 +135,6 @@
 				84721E331DCCB6DB00014F87 /* DownloadCell.m */,
 				84721E131DCC6F2E00014F87 /* AppDelegate.h */,
 				84721E141DCC6F2E00014F87 /* AppDelegate.m */,
-				847A5B181DDC8A9500A4063E /* UIScrollView+EmptyDataSet.h */,
-				847A5B191DDC8A9500A4063E /* UIScrollView+EmptyDataSet.m */,
 				84721E191DCC6F2E00014F87 /* Main.storyboard */,
 				84721E1C1DCC6F2E00014F87 /* Assets.xcassets */,
 				84721E1E1DCC6F2E00014F87 /* LaunchScreen.storyboard */,
@@ -161,10 +147,7 @@
 		84721E101DCC6F2E00014F87 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
-=======
 				84F47E4A1DE2FA6A0081064E /* pause.png */,
->>>>>>> Beta
 				847A5B251DDC8FF500A4063E /* emptyPlaceholder.png */,
 				849E0BCE1DDDDB310093F7C2 /* pdf.png */,
 				84721E111DCC6F2E00014F87 /* main.m */,
@@ -196,11 +179,8 @@
 				8436F53E1DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m */,
 				843FF8AD1DDAF854008B8B27 /* DataDownload.h */,
 				843FF8AE1DDAF854008B8B27 /* DataDownload.m */,
-<<<<<<< HEAD
-=======
 				84262E3D1DE4322400B968DE /* TaskWithBlocks.h */,
 				84262E3E1DE4322400B968DE /* TaskWithBlocks.m */,
->>>>>>> Beta
 			);
 			name = "CoreData & Model";
 			path = ..;
@@ -250,10 +230,7 @@
 				TargetAttributes = {
 					84721E0C1DCC6F2E00014F87 = {
 						CreatedOnToolsVersion = 8.0;
-<<<<<<< HEAD
-=======
 						DevelopmentTeam = LE3554D3R2;
->>>>>>> Beta
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -286,10 +263,7 @@
 				84721E1D1DCC6F2E00014F87 /* Assets.xcassets in Resources */,
 				84721E1B1DCC6F2E00014F87 /* Main.storyboard in Resources */,
 				847A5B261DDC8FF500A4063E /* emptyPlaceholder.png in Resources */,
-<<<<<<< HEAD
-=======
 				84F47E4B1DE2FA6A0081064E /* pause.png in Resources */,
->>>>>>> Beta
 				849E0BCF1DDDDB310093F7C2 /* pdf.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -311,10 +285,7 @@
 				84AD607F1DD9D68A00D8C912 /* Model.xcdatamodeld in Sources */,
 				84B855621DD06B0B00F2E5D3 /* GoogleSearchPDF.m in Sources */,
 				8436F53F1DDB78B500BB65C4 /* DataDownloadCoreData.m in Sources */,
-<<<<<<< HEAD
-=======
 				84262E4C1DE459F200B968DE /* Reachability.m in Sources */,
->>>>>>> Beta
 				84721E291DCC70FD00014F87 /* DownloadManager.m in Sources */,
 				8436F5401DDB78B500BB65C4 /* DataDownloadCoreData+CoreDataProperties.m in Sources */,
 				84235C871DDC4CEF00337939 /* SearchHistory+CoreDataProperties.m in Sources */,
@@ -440,10 +411,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-<<<<<<< HEAD
-=======
 				DEVELOPMENT_TEAM = LE3554D3R2;
->>>>>>> Beta
 				INFOPLIST_FILE = MegaDownloadManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -460,10 +428,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-<<<<<<< HEAD
-=======
 				DEVELOPMENT_TEAM = LE3554D3R2;
->>>>>>> Beta
 				INFOPLIST_FILE = MegaDownloadManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

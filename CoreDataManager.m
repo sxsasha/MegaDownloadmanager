@@ -131,11 +131,6 @@
     newSearchRequest.getCount = count;
     newSearchRequest.time = date;
     
-<<<<<<< HEAD
-    [self save:nil];
-    
-=======
->>>>>>> Beta
     return newSearchRequest;
 }
 
