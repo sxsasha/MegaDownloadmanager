@@ -14,6 +14,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UILabel *sizeProgressLabel;
+<<<<<<< HEAD
+=======
+@property (weak, nonatomic) IBOutlet UIImageView *pauseImageView;
+>>>>>>> Beta
 
 @property (weak, nonatomic) DataDownload* dataDownload;
 

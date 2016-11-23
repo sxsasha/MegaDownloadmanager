@@ -6,6 +6,7 @@
 //  Copyright © 2016 admin. All rights reserved.
 //
 
+<<<<<<< HEAD
 #import <Foundation/Foundation.h>
 #import "DataDownload.h"
 
@@ -18,14 +19,31 @@
 
 @end
 
+=======
+>>>>>>> Beta
 
+#import <Foundation/Foundation.h>
+#import "DataDownload.h"
+#import "TaskWithBlocks.h"
 
 @interface DownloadManager : NSObject <NSURLSessionDownloadDelegate>
 
 @property (nonatomic,strong) NSURLSession* defaultSession;
+<<<<<<< HEAD
 @property (nonatomic,weak) id <DownloadTasksDelegate> delegate;
 
 +(DownloadManager*) sharedManagerWithDelegate: (id <DownloadTasksDelegate>) delegate;
 -(NSURLSessionDownloadTask*) downloadWithURL: (NSString*) urlString;
+=======
+@property (nonatomic,strong) NSMutableDictionary* dictOfDownloadTask;
+
+
++(DownloadManager*) sharedManager;
+
+-(NSURLSessionDownloadTask*) downloadWithURL: (NSString*) urlString
+                            progressDownload: (ProgressBlock) progressBlock
+                               complateBlock: (ComplateBlock)complateBlock
+                                  errorBlock: (ErrorBlock) errorBlock;
+>>>>>>> Beta
 
 @end
