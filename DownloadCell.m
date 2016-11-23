@@ -45,6 +45,17 @@
     }
 }
 
+- (void)dealloc
+{
+    if (self.observationInfo)
+    {
+        [self removeObserver:self forKeyPath:@"dataDownload.progress"];
+        [self removeObserver:self forKeyPath:@"dataDownload.downloaded"];
+        [self removeObserver:self forKeyPath:@"dataDownload.isComplate"];
+        [self removeObserver:self forKeyPath:@"dataDownload.isPause"];
+    }
+}
+
 #pragma mark - Update cell
 - (void) observeValueForKeyPath:(NSString *)keyPath
                        ofObject:(id)object

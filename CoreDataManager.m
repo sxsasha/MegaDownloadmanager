@@ -131,8 +131,6 @@
     newSearchRequest.getCount = count;
     newSearchRequest.time = date;
     
-    [self save:nil];
-    
     return newSearchRequest;
 }
 

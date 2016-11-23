@@ -2,7 +2,7 @@
 //  DataDownloadCoreData+CoreDataProperties.h
 //  MegaDownloadManager
 //
-//  Created by admin on 22.11.16.
+//  Created by admin on 23.11.16.
 //  Copyright © 2016 admin. All rights reserved.
 //
 
@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *isComplate;
 @property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, copy) NSString *urlString;
+@property (nullable, nonatomic, copy) NSString *localName;
 
 @end
 

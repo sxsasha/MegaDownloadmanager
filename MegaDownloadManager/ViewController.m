@@ -34,6 +34,10 @@
 {
     [super viewDidLoad];
     
+//    NSURL* documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+//    
+//    NSLog(@"documentsURL: %@", documentsURL);
+    
     [self emptyTableView];
     [self initALL];
     [self setupSearchBar];
@@ -51,8 +55,7 @@
     self.tableView.emptyDataSetSource = self;
     self.tableView.emptyDataSetDelegate = self;
     // A little trick for removing the cell separators
-    self.tableView.tableFooterView = [UIView new];
-    self.tableView.allowsMultipleSelectionDuringEditing = YES;
+    self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 - (void) initALL
@@ -104,7 +107,11 @@
 #pragma mark - Actions
 - (IBAction)addMorePDFLinks:(UIBarButtonItem *)sender
 {
-     [self  addMorePDFLinks];
+    [self  addMorePDFLinks];
+    [sender setEnabled:NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        sender.enabled = YES;
+    });
 }
 
 #pragma mark - Help Methods
@@ -114,6 +121,7 @@
     if (self.reach.isReachable)
     {
         [self.searchPDFmanager getTenPDFLinksWithSearchString:self.searchBar.text];
+        [self.searchBar resignFirstResponder];
     }
     else
     {
@@ -161,6 +169,7 @@
 
 - (void)givePDFLink:(NSArray <NSString*> *)links
 {
+    NSMutableArray* array = [NSMutableArray array];
     for (NSString* urlString in links)
     {
         BOOL isHaveSomeURL = NO;
@@ -172,11 +181,19 @@
         {
             DataDownload* download = [[DataDownload alloc] init];
             download.urlString = urlString;
-            [self.arrayOfDataDownload addObject:download];
+            [array addObject:download];
         }
     }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray* arrayOfIndexs = [NSMutableArray array];
+        for (int i = 0; i < [array count]; i++)
+        {
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            [arrayOfIndexs addObject:indexPath];
+        }
+        NSIndexSet* indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [array count])];
+        [self.arrayOfDataDownload insertObjects:array atIndexes:indexSet];
+        [self.tableView insertRowsAtIndexPaths:arrayOfIndexs withRowAnimation:UITableViewRowAnimationTop];
         [self.tableView reloadData];
     });
 }
@@ -225,7 +242,7 @@
 
     DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
     NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
-    
+
     if ([[NSFileManager defaultManager] fileExistsAtPath:localURL.resourceSpecifier])
     {
         UIViewController* viewController = [[UIViewController alloc]init];
@@ -234,10 +251,13 @@
         self.webView = nil;
         viewController.view = self.webView = [[UIWebView alloc]init];
         self.webView.delegate = self;
-        
+        self.webView.scalesPageToFit = YES;
+        self.webView.scrollView.maximumZoomScale = 20;
+        self.webView.scrollView.minimumZoomScale = 1;
+
         NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
-        NSURLRequest* requests = [NSURLRequest requestWithURL:localURL];
-        [self.webView loadRequest:requests];
+        NSData *pdfData = [[NSData alloc] initWithContentsOfURL:localURL];
+        [self.webView loadData:pdfData MIMEType:@"application/pdf" textEncodingName:@"UTF-8" baseURL:localURL];
         
         [self.navigationController pushViewController:viewController animated:YES];
         dataDownload.isComplate = YES;
@@ -302,10 +322,8 @@
         [dataDownload removeFromDatabase];
         [dataDownload.downloadTask cancel];
         
-        dataDownload = nil;
-        
         [self.tableView beginUpdates];
-        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
     }
 }
@@ -329,6 +347,7 @@
     NSString* html = @"<html><body><head><h1>Error with open File</h1></head></body></html>";
     [webView loadHTMLString:html baseURL:nil];
 }
+
 #pragma mark - DZNEmptyDataSetSource & DZNEmptyDataSetDelegate
 
 - (UIImage* )imageForEmptyDataSet:(UIScrollView* )scrollView

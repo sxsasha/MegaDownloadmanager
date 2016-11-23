@@ -13,6 +13,7 @@
 @interface DataDownload : NSObject
 
 @property (nonatomic,   strong) NSString *name;
+@property (nonatomic,   strong) NSString *localName;
 @property (nonatomic,   assign) int16_t identifier;
 @property (nonatomic,   strong) NSString *urlString;
 @property (nonatomic,   strong) NSString *localURL;

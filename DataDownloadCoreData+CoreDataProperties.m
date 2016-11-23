@@ -2,7 +2,7 @@
 //  DataDownloadCoreData+CoreDataProperties.m
 //  MegaDownloadManager
 //
-//  Created by admin on 22.11.16.
+//  Created by admin on 23.11.16.
 //  Copyright © 2016 admin. All rights reserved.
 //
 
@@ -17,5 +17,6 @@
 @dynamic isComplate;
 @dynamic name;
 @dynamic urlString;
+@dynamic localName;
 
 @end
