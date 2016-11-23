@@ -325,6 +325,11 @@
         [self.tableView beginUpdates];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
+        
+        //fix for bug with undelete observer
+        dataDownload.progress = -100.f;
+        
+        dataDownload = nil;
     }
 }
 

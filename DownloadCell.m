@@ -65,6 +65,11 @@
     if ([keyPath isEqualToString:@"dataDownload.progress"])
     {
         double progress = [((NSNumber*)[change valueForKey: NSKeyValueChangeNewKey]) doubleValue];
+        if (progress <= -100.f)
+        {
+            [self removeAllObserver];
+            return;
+        }
         double percent = (((progress*100) < 0)||((progress*100) > 100)) ? 0.f: progress*100;
         
         dispatch_async(dispatch_get_main_queue(), ^
