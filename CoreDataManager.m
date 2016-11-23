@@ -168,7 +168,17 @@
 
 - (BOOL) save: (NSError**) errorWithSave
 {
-    return  [self.managedObjectContext save:errorWithSave];
+    BOOL isSaveOk = NO;
+    @try
+    {
+        isSaveOk = [self.managedObjectContext save:errorWithSave];
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"Exception%@",exception.description);
+    }
+
+    return isSaveOk;
 }
 
 @end
