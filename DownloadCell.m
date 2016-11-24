@@ -21,6 +21,7 @@
 {
     __weak id weakId = dataDownload;
     _dataDownload = weakId;
+    
     [self addObserver:self forKeyPath:@"dataDownload.progress" options:NSKeyValueObservingOptionNew context:nil];
     [self addObserver:self forKeyPath:@"dataDownload.downloaded" options:NSKeyValueObservingOptionNew context:nil];
     [self addObserver:self forKeyPath:@"dataDownload.isComplate" options:NSKeyValueObservingOptionNew context:nil];

@@ -205,7 +205,7 @@
     }];
 }
 
-#pragma mark - UITableViewDataSource
+#pragma mark - UITableViewDataSource & UITableViewDelegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -312,9 +312,6 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        DownloadCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [cell removeAllObserver];
-        
         DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
         [self.arrayOfDataDownload removeObject:dataDownload];
         [dataDownload removeFromDatabase];
@@ -324,7 +321,7 @@
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
         
-        //fix for bug with undelete observer
+        //fix  bug with undelete observer
         dataDownload.progress = -100.f;
         
         dataDownload = nil;
