@@ -175,7 +175,9 @@
     }
     @catch (NSException *exception)
     {
+#ifdef DEBUG
         NSLog(@"Exception%@",exception.description);
+#endif
     }
 
     return isSaveOk;
