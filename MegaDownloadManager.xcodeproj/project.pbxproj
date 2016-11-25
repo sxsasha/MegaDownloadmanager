@@ -29,6 +29,7 @@
 		84AD607F1DD9D68A00D8C912 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84AD607D1DD9D68A00D8C912 /* Model.xcdatamodeld */; };
 		84AD60961DD9DFA500D8C912 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD60951DD9DFA500D8C912 /* CoreDataManager.m */; };
 		84B855621DD06B0B00F2E5D3 /* GoogleSearchPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B855611DD06B0B00F2E5D3 /* GoogleSearchPDF.m */; };
+		84E773D81DE87FD80097BA81 /* download.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E773D71DE87FD80097BA81 /* download.png */; };
 		84F47E4B1DE2FA6A0081064E /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F47E4A1DE2FA6A0081064E /* pause.png */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,7 @@
 		84AD60951DD9DFA500D8C912 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoreDataManager.m; path = ../CoreDataManager.m; sourceTree = "<group>"; };
 		84B855601DD06B0B00F2E5D3 /* GoogleSearchPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GoogleSearchPDF.h; path = ../GoogleSearchPDF.h; sourceTree = "<group>"; };
 		84B855611DD06B0B00F2E5D3 /* GoogleSearchPDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GoogleSearchPDF.m; path = ../GoogleSearchPDF.m; sourceTree = "<group>"; };
+		84E773D71DE87FD80097BA81 /* download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download.png; sourceTree = "<group>"; };
 		84F47E4A1DE2FA6A0081064E /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,6 +149,7 @@
 		84721E101DCC6F2E00014F87 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				84E773D71DE87FD80097BA81 /* download.png */,
 				84F47E4A1DE2FA6A0081064E /* pause.png */,
 				847A5B251DDC8FF500A4063E /* emptyPlaceholder.png */,
 				849E0BCE1DDDDB310093F7C2 /* pdf.png */,
@@ -264,6 +267,7 @@
 				84721E1B1DCC6F2E00014F87 /* Main.storyboard in Resources */,
 				847A5B261DDC8FF500A4063E /* emptyPlaceholder.png in Resources */,
 				84F47E4B1DE2FA6A0081064E /* pause.png in Resources */,
+				84E773D81DE87FD80097BA81 /* download.png in Resources */,
 				849E0BCF1DDDDB310093F7C2 /* pdf.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

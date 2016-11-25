@@ -17,6 +17,7 @@
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate,UISearchBarDelegate, UIWebViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 
 @property (nonatomic,strong) NSMutableArray* arrayOfDataDownload;
+@property (nonatomic,strong) NSMutableArray* selectedItemsArray;
 @property (nonatomic,strong) Reachability* reach;
 
 @property (nonatomic,strong) DownloadManager* downloadManager;
@@ -25,6 +26,8 @@
 @property (nonatomic,strong) UIWebView* webView;
 @property (strong, nonatomic) UISearchBar* searchBar;
 @property (strong, nonatomic) UITextField* searchField;
+
+@property (nonatomic, assign) BOOL isMultipleEditing;
 
 @end
 
@@ -37,6 +40,7 @@
     [self emptyTableView];
     [self initAll];
     [self setupSearchBar];
+    [self setupEditItem];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,6 +64,7 @@
     self.searchPDFmanager = [GoogleSearchPDF sharedManagerWithDelegate:self];
     
     self.arrayOfDataDownload = [NSMutableArray array];
+    self.selectedItemsArray = [NSMutableArray array];
     
     NSArray* dataDownloadsFromDatabase = [DataDownload getAllDataDownloadFromaDatabase];
     [self.arrayOfDataDownload addObjectsFromArray:dataDownloadsFromDatabase];
@@ -90,17 +95,26 @@
             self.searchField = [view.subviews objectAtIndex:i];
         }
     }
+}
 
+- (void) setupEditItem
+{
+    UIBarButtonItem* editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(editButtonTap)];
+    
+    self.navigationItem.leftBarButtonItem = editButton;
 }
 
 
-#pragma mark - UISearchBarDelegate
+#pragma mark - Actions  //UISearchBarDelegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [self  addMorePDFLinks];
 }
 
-#pragma mark - Actions
+
 - (IBAction)addMorePDFLinks:(UIBarButtonItem *)sender
 {
     [self  addMorePDFLinks];
@@ -108,6 +122,41 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         sender.enabled = YES;
     });
+}
+
+- (void) editButtonTap
+{
+    self.isMultipleEditing = !self.isMultipleEditing;
+    
+    if (self.isMultipleEditing)
+    {
+        UIBarButtonItem* editButton = [[UIBarButtonItem alloc] initWithTitle:@"Delete All"
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self
+                                                                      action:@selector(editButtonTap)];
+        
+        self.navigationItem.leftBarButtonItem = editButton;
+    }
+    else
+    {
+        UIBarButtonItem* editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self
+                                                                      action:@selector(editButtonTap)];
+        
+        self.navigationItem.leftBarButtonItem = editButton;
+        
+        for (DownloadCell* cell in self.tableView.visibleCells)
+        {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        for (DataDownload* dataDownloads in self.arrayOfDataDownload)
+        {
+            dataDownloads.cellAccessoryType = UITableViewCellAccessoryNone;
+        }
+        
+        [self removeDataDownload:self.selectedItemsArray];
+    }
 }
 
 #pragma mark - Help Methods
@@ -136,23 +185,42 @@
 
 - (void) reSetupCell: (DownloadCell*) cell
 {
-    cell.dataDownload.progress = cell.dataDownload.progress;
+    DataDownload* dataDownload = cell.dataDownload;
+
+    double percent = [self percentFromProgress:dataDownload.progress];
     
-    double percent = [self percentFromProgress:cell.dataDownload.progress];
+    cell.accessoryType = cell.dataDownload.cellAccessoryType;
     cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
-    
-    cell.nameLabel.text = cell.dataDownload.name;
-    
-    cell.sizeProgressLabel.text = cell.dataDownload.downloaded;
-    
-    [cell.progressView setProgress:cell.dataDownload.progress animated:NO];
-    
-    cell.pauseImageView.hidden = !cell.dataDownload.isPause;
+    cell.nameLabel.text = dataDownload.name;
+    cell.sizeProgressLabel.text = dataDownload.downloaded;
+    [cell.progressView setProgress:dataDownload.progress animated:NO];
+    cell.pauseImageView.hidden = !dataDownload.isPause;
 }
 
 - (double) percentFromProgress: (double) progress
 {
     return (((progress*100) < 0)||((progress*100) > 100)) ? 0.f: progress*100;
+}
+
+- (void) removeDataDownload : (NSArray<DataDownload*> *) dataDownloadArray
+{
+    for (DataDownload* dataDownload in dataDownloadArray)
+    {
+        if ([self.arrayOfDataDownload containsObject:dataDownload])
+        {
+            [self.arrayOfDataDownload removeObject:dataDownload];
+            
+            [dataDownload removeFromDatabase];
+            [dataDownload.downloadTask cancel];
+            
+            dataDownload.cell.dataDownload = nil;
+            dataDownload.cell = nil;
+        }
+    }
+    
+    self.selectedItemsArray = nil;
+    self.selectedItemsArray = [NSMutableArray array];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -214,15 +282,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString* identifier = @"pdf";
+    DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
     
+    NSString* identifier = @"pdf";
     DownloadCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    
     if (!cell)
     {
         cell = [[DownloadCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     
-    cell.dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
+    cell.dataDownload.cell = nil;
+    cell.dataDownload = nil;
+    dataDownload.cell = nil;
+    
+    cell.dataDownload = dataDownload;
+    dataDownload.cell = cell;
     
     [self reSetupCell:cell];
     
@@ -237,6 +312,25 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (self.isMultipleEditing)
+    {
+        DownloadCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+        
+        if(cell.accessoryType == UITableViewCellAccessoryNone)
+        {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.dataDownload.cellAccessoryType = cell.accessoryType;
+            [self.selectedItemsArray addObject:cell.dataDownload];
+        }
+        else
+        {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.dataDownload.cellAccessoryType = cell.accessoryType;
+            [self.selectedItemsArray removeObject:cell.dataDownload];
+        }
+        return;
+    }
 
     DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
     NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
@@ -255,9 +349,25 @@
 
         NSURL* localURL = [NSURL URLWithString:dataDownload.localURL];
         NSData *pdfData = [[NSData alloc] initWithContentsOfURL:localURL];
-        [self.webView loadData:pdfData MIMEType:@"application/pdf" textEncodingName:@"UTF-8" baseURL:localURL];
+        
+        if (pdfData)
+        {
+            CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)pdfData);
+            CGPDFDocumentRef document = CGPDFDocumentCreateWithProvider(provider);
+            
+            if (document == nil)
+            {
+                NSString* html = @"<html><body><head><h1>Error with open File</h1></head></body></html>";
+                [self.webView loadHTMLString:html baseURL:nil];
+            }
+            else
+            {
+                [self.webView loadData:pdfData MIMEType:@"application/pdf" textEncodingName:@"UTF-8" baseURL:localURL];
+            }
+        }
         
         [self.navigationController pushViewController:viewController animated:YES];
+        
         dataDownload.isComplate = YES;
         dataDownload.isDownloading = NO;
     }
@@ -279,6 +389,8 @@
         ErrorBlock errorBlock = ^(NSError* error)
         {
             dataDownload.downloaded = error.localizedFailureReason;
+            dataDownload.isDownloading = NO;
+            
         };
  
         dataDownload.downloadTask = [self.downloadManager downloadWithURL:dataDownload.urlString
@@ -314,15 +426,20 @@
     {
         DataDownload* dataDownload = [self.arrayOfDataDownload objectAtIndex:indexPath.row];
         [self.arrayOfDataDownload removeObject:dataDownload];
+        if ([self.selectedItemsArray containsObject:dataDownload])
+        {
+            [self.selectedItemsArray removeObject:dataDownload];
+        }
+        
         [dataDownload removeFromDatabase];
         [dataDownload.downloadTask cancel];
+        
+        dataDownload.cell.dataDownload = nil;
+        dataDownload.cell = nil;
         
         [self.tableView beginUpdates];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
-        
-        //fix  bug with undelete observer
-        dataDownload.progress = -100.f;
         
         dataDownload = nil;
     }

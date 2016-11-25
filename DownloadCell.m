@@ -12,39 +12,39 @@
 
 #pragma mark - Some Main methods
 
--(void) prepareForReuse
-{
-    [self removeAllObserver];
-}
-
-- (void) setDataDownload:(DataDownload *)dataDownload
-{
-    __weak id weakId = dataDownload;
-    _dataDownload = weakId;
-    
-    [self addObserver:self forKeyPath:@"dataDownload.progress" options:NSKeyValueObservingOptionNew context:nil];
-    [self addObserver:self forKeyPath:@"dataDownload.downloaded" options:NSKeyValueObservingOptionNew context:nil];
-    [self addObserver:self forKeyPath:@"dataDownload.isComplate" options:NSKeyValueObservingOptionNew context:nil];
-    [self addObserver:self forKeyPath:@"dataDownload.isPause" options:NSKeyValueObservingOptionNew context:nil];
-}
-
-- (void)dealloc
-{
-    [self removeAllObserver];
-}
-
-
-#pragma mark - remove observer than delete dataDownload
-- (void) removeAllObserver
-{
-    if (self.observationInfo)
-    {
-        [self removeObserver:self forKeyPath:@"dataDownload.progress"];
-        [self removeObserver:self forKeyPath:@"dataDownload.downloaded"];
-        [self removeObserver:self forKeyPath:@"dataDownload.isComplate"];
-        [self removeObserver:self forKeyPath:@"dataDownload.isPause"];
-    }
-}
+//-(void) prepareForReuse
+//{
+//    [self removeAllObserver];
+//}
+//
+//- (void) setDataDownload:(DataDownload *)dataDownload
+//{
+//    __weak id weakId = dataDownload;
+//    _dataDownload = weakId;
+//    
+//    [self addObserver:self forKeyPath:@"dataDownload.progress" options:NSKeyValueObservingOptionNew context:nil];
+//    [self addObserver:self forKeyPath:@"dataDownload.downloaded" options:NSKeyValueObservingOptionNew context:nil];
+//    [self addObserver:self forKeyPath:@"dataDownload.isComplate" options:NSKeyValueObservingOptionNew context:nil];
+//    [self addObserver:self forKeyPath:@"dataDownload.isPause" options:NSKeyValueObservingOptionNew context:nil];
+//}
+//
+//- (void)dealloc
+//{
+//    [self removeAllObserver];
+//}
+//
+//
+//#pragma mark - remove observer than delete dataDownload
+//- (void) removeAllObserver
+//{
+//    if (self.observationInfo)
+//    {
+//        [self removeObserver:self forKeyPath:@"dataDownload.progress"];
+//        [self removeObserver:self forKeyPath:@"dataDownload.downloaded"];
+//        [self removeObserver:self forKeyPath:@"dataDownload.isComplate"];
+//        [self removeObserver:self forKeyPath:@"dataDownload.isPause"];
+//    }
+//}
 
 #pragma mark - Update cell
 - (void) observeValueForKeyPath:(NSString *)keyPath
@@ -57,7 +57,7 @@
         double progress = [((NSNumber*)[change valueForKey: NSKeyValueChangeNewKey]) doubleValue];
         if (progress <= -100.f)
         {
-            [self removeAllObserver];
+          //  [self removeAllObserver];
             return;
         }
         double percent = (((progress*100) < 0)||((progress*100) > 100)) ? 0.f: progress*100;

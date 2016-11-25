@@ -19,6 +19,7 @@
     {
         self.coreDataManager = [CoreDataManager sharedManager];
         self.dataDownloadCoreData = [self.coreDataManager addDataDownload];
+        self.cellAccessoryType = UITableViewCellAccessoryNone;
     }
     return self;
 }
@@ -109,6 +110,76 @@
 {
     _localName = localName;
     self.dataDownloadCoreData.localName = localName;
+}
+
+
+#pragma mark Setters for updating interface
+- (void) setIsPause:(BOOL)isPause
+{
+    _isPause = isPause;
+    dispatch_async(dispatch_get_main_queue(), ^
+                   {
+                       if (isPause)
+                       {
+                           self.cell.pauseImageView.image = [UIImage imageNamed:@"pause.png"];
+                           [self.cell.pauseImageView setHidden:NO];
+                       }
+                       else if (self.isDownloading)
+                       {
+                           self.cell.pauseImageView.image = [UIImage imageNamed:@"download.png"];
+                           [self.cell.pauseImageView setHidden:NO];
+                       }
+                       else
+                       {
+                           [self.cell.pauseImageView setHidden:YES];
+                       }
+                   });
+}
+
+- (void) setIsDownloading:(BOOL)isDownloading
+{
+    _isDownloading = isDownloading;
+    dispatch_async(dispatch_get_main_queue(), ^
+                   {
+                       if (isDownloading)
+                       {
+                           self.cell.pauseImageView.image = [UIImage imageNamed:@"download.png"];
+                           [self.cell.pauseImageView setHidden:NO];
+                       }
+                   });
+}
+
+- (void) setIsComplate:(BOOL)isComplate
+{
+    _isComplate = isComplate;
+    dispatch_async(dispatch_get_main_queue(), ^
+                   {
+                       self.cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",100.f];
+                       [self.cell.progressView setProgress:1.f animated:NO];
+                       self.cell.pauseImageView.hidden = YES;
+                   });
+}
+
+- (void) setProgress:(double)progress
+{
+    _progress = progress;
+    double percent = (((progress*100) < 0)||((progress*100) > 100)) ? 0.f: progress*100;
+    
+    dispatch_async(dispatch_get_main_queue(), ^
+                   {
+                       self.cell.progressLabel.text = [NSString stringWithFormat:@"%.2f",percent];
+                       [self.cell.progressView setProgress:progress animated:NO];
+                   });
+
+}
+
+- (void) setDownloaded:(NSString *)downloaded
+{
+    _downloaded = downloaded;
+    dispatch_async(dispatch_get_main_queue(), ^
+                   {
+                       self.cell.sizeProgressLabel.text = downloaded;
+                   });
 }
 
 #pragma mark - Help Methods

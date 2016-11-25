@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DataDownload.h"
+
+@class DataDownload;
 
 @interface DownloadCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *progressLabel;
@@ -16,8 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *sizeProgressLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *pauseImageView;
 
-@property (weak, nonatomic) DataDownload* dataDownload;
+@property (nonatomic,weak) DataDownload* dataDownload;
 
-- (void) removeAllObserver;
 
 @end

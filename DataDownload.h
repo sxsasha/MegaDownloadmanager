@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "DataDownloadCoreData.h"
 #import "CoreDataManager.h"
+#import "DownloadCell.h"
+
 
 @interface DataDownload : NSObject
 
@@ -26,6 +28,9 @@
 @property (nonatomic,   strong) DataDownloadCoreData* dataDownloadCoreData;
 @property (nonatomic,   strong) CoreDataManager* coreDataManager;
 @property (nonatomic,   weak) NSURLSessionDownloadTask* downloadTask;
+
+@property (nonatomic,   weak) DownloadCell* cell;
+@property (nonatomic,   assign) UITableViewCellAccessoryType cellAccessoryType;
 
 +(NSArray*) getAllDataDownloadFromaDatabase;
 - (void) removeFromDatabase;
