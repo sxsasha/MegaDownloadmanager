@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "UIScrollView+EmptyDataSet.h"
 
-@interface ViewController : UITableViewController 
+@interface ViewController : UITableViewController
 
+@property (nonatomic,strong) NSMutableArray* arrayOfDataDownload;
 
 @end
 

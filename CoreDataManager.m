@@ -7,7 +7,9 @@
 //
 
 #import "CoreDataManager.h"
-
+#import <UIKit/UIKit.h>
+#import "ViewController.h"
+#import "DataDownload.h"
 
 #define documentURL [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]
 
@@ -116,6 +118,9 @@
     fetchRequest.includesPropertyValues = YES;
     fetchRequest.returnsObjectsAsFaults = NO;
     
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc]initWithKey:@"order" ascending:YES];
+    [fetchRequest setSortDescriptors:@[sortDescriptor]];
+    
     NSArray* allDataDownloads = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
     
     return allDataDownloads;
@@ -168,6 +173,18 @@
 
 - (BOOL) save: (NSError**) errorWithSave
 {
+    
+    UINavigationController* ourRootController = (UINavigationController*)[[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
+    ViewController* ourViewController = [ourRootController.viewControllers firstObject];
+    
+    int i = 0;
+    for (DataDownload* dataDownload in ourViewController.arrayOfDataDownload)
+    {
+        
+        dataDownload.dataDownloadCoreData.order = @(i);
+        i = i + 1;
+    }
+    
     BOOL isSaveOk = NO;
     @try
     {

@@ -16,7 +16,6 @@
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource,GotPDFLinksDelegate,UISearchBarDelegate, UIWebViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 
-@property (nonatomic,strong) NSMutableArray* arrayOfDataDownload;
 @property (nonatomic,strong) NSMutableArray* selectedItemsArray;
 @property (nonatomic,strong) Reachability* reach;
 
